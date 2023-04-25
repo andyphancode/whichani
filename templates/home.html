@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="home-content">
+        {% if not g.user %}
+        <h1 class="home-greeting">Welcome to WhichAni!</h1>
+        <form action="/recommend" method="GET">
+            <button class="home-primary-button">Get Started</button>
+        </form>
+        <form action="/signup" method="GET">
+            <button class="home-secondary-button">Signup</button>
+        </form>
+        {% else %}
+        <h1 class="home-greeting">Welcome, <span class="home-username">{{ g.user.username}}!</span></h1>
+        <form action="/recommend" method="GET">
+            <button class="home-primary-button">Get Started</button>
+        </form>
+        <form action="/new_list" method="GET">
+            <button class="home-secondary-button">Make a List</button>
+        </form>
+        {% endif %}
+    </div>
+
+{% endblock %}
