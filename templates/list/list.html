@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %} {{list.title}} {% endblock %}
+
+{% block content %}
+
+
+
+<div id="list-container">
+
+
+    <div class="row my-3 justify-content-center">
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}        
+    </div>
+    <div class="row no-gutters my-3 justify-content-center">
+        <div class="col-md-9 px-3 my-auto">
+            <div class="title-container">
+                <span>{{list.title}}</span>
+            </div>
+            <div class="desc-container">
+                <p>{{list.description}}</p>
+            </div>
+            <div>
+                <small>All images and synopses retrieved from MyAnimeList.</small>
+            </div>
+        </div>
+        <div class="col-md-3 px-3 text-center my-auto">
+            <div>
+                <p id="list-url-notif">Click to copy this URL!</p>
+                <input type="text" id="list-clipboard" value="http://127.0.0.1:5000/list/{{list.list_id}}" readonly>
+            </div>
+            <div>
+                {% if list.user_id == g.user.user_id%}
+                    <a href="/list/{{list.list_id}}/edit">Edit this list</a>
+                    <br>
+                    <a href="/list/{{list.list_id}}/delete">Delete this list</a>
+                {% endif %}    
+            </div>
+            
+
+        </div>
+    </div>
+    {% for anime in list.anime %} 
+    <div class="row no-gutters my-3 justify-content-center anime-container">
+        <div class="col-md-3 text-center column-left">
+            <img src="{{anime.anime_image_url}}" alt="Cover image for {{anime.anime_title}}">
+        </div>
+        <div class="col-md-9 px-3 column-right">
+            <div class="title-container">
+                <span>{{anime.anime_title}}</span>
+            </div>
+            <div class="desc-container">
+                <p>{{anime.anime_description}}</p>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+<script>
+    const temp = $("<input>");
+    const url = $(location).attr('href');
+
+    $('#list-clipboard').on('click', function() {
+        $("body").append(temp);
+        temp.val(url).select();
+        document.execCommand("copy");
+        temp.remove();
+        $("#list-url-notif").text("Copied!")
+    })
+</script>
+
+{% endblock %}
