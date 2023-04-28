@@ -94,6 +94,20 @@ class Anime(db.Model):
         db.Integer,
         primary_key=True
     )
+    anime_image_url = db.Column(
+        db.Text,
+        default="No image found"
+    )
+    anime_description = db.Column(
+        db.Text
+    )
+    anime_title = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+
+
 
 class List(db.Model):
     """List saving anime+description entries."""
@@ -125,9 +139,14 @@ class List(db.Model):
         backref='lists'
     )
 
+    listings = db.relationship('Listings',
+                               backref='lists')
+
 class Listings(db.Model):
 
     __tablename__ = "listings"
+
+
 
     listing_id = db.Column(
         db.Integer,
@@ -143,6 +162,16 @@ class Listings(db.Model):
         db.Integer,
         db.ForeignKey('lists.list_id', ondelete='cascade')
     )
+    
+    listing_description = db.Column(
+        db.Text
+    )
+
+    def __repr__(self):
+        """Show info on listing."""
+
+        l = self
+        return f"<Listing {l.listing_id} {l.anime_id} {l.list_id} {l.listing_description}>"
 
 
 ## Stretch feature, saved code
