@@ -63,7 +63,7 @@ def home():
 # User signup/login/logout view functions
 ######################################################
 
-@app.route('/signup', methods=["GET", "POST"])
+@app.route('/signup/', methods=["GET", "POST"])
 def signup():
 
     form = SignUpForm()
@@ -89,14 +89,14 @@ def signup():
     else: 
         return render_template('/user/signup.html', form=form)
 
-@app.route('/logout', methods=["GET"])
+@app.route('/logout/', methods=["GET"])
 def logout():
     """Logout a user."""
 
     do_logout()
     return redirect("/")
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route('/login/', methods=["GET", "POST"])
 def login():
     """Login a user."""
 
@@ -118,7 +118,12 @@ def login():
 # List functions
 ######################################################
 
-@app.route("/recommend", methods=["GET", "POST"])
+@app.route("/new_list/")
+def new_list():
+    """Create an empty new list."""
+
+
+@app.route("/recommend/", methods=["GET", "POST"])
 def recommend():
     if request.method == "GET":
         return render_template("/list/recommend.html")
@@ -154,7 +159,7 @@ def recommend():
                     anime_id=resp.json()['data'][i]['mal_id'],
                     anime_image_url=resp.json()['data'][i]['images']['jpg']['image_url'],
                     anime_title = resp.json()['data'][i]['title'],
-                    anime_description = (resp.json()['data'][i]['synopsis']).replace('[Written by MAL Rewrite]',''),
+                    anime_description = (resp.json()['data'][i]['synopsis']).replace('[Written by MAL Rewrite]','')
                 )
                 db.session.add(anime)
                 db.session.commit()
@@ -181,60 +186,147 @@ def recommend():
                 db.session.commit()
         return redirect(f"/list/{list.list_id}")
 
-@app.route("/list/<int:list_id>", methods=["GET"])
+@app.route("/list/<int:list_id>/", methods=["GET", "POST"])
 def show_list(list_id):
-    print(list_id)
+
     list = List.query.get_or_404(list_id)
 
-    print(list.listings[0])
-    print(list.anime)
+    if request.method == "GET":
+        return render_template("/list/list.html", list=list)
+    
+    if request.method == "POST":
+        list.title = request.form.get('title')
+        list.description = request.form.get('description')
 
-    return render_template("/list/list.html", list=list)
+        db.session.add(list)
+        db.session.commit()
+        return redirect(f"/list/{list_id}")
 
-@app.route("/list/<int:list_id>/delete", methods=["GET","POST"])
+@app.route("/list/<int:list_id>/delete/", methods=["GET", "POST"])
 def delete_list(list_id):
 
     list = List.query.get_or_404(list_id)
 
+    if list.user_id != g.user.user_id:
+        flash("You do not have permission to do that!", "danger")
+        return redirect(f"/list/{list_id}")
+    
     if request.method == "GET":
-        if list.user_id != g.user.user_id:
-            flash("You do not have permission to do that!", "danger")
-            return redirect(f"/list/{list.list_id}")
-        else:
-            return render_template("/list/delete.html", list=list)
+        return render_template("/list/delete.html", list=list)
 
-    if request.method == "POST":
-        if list.user_id != g.user.user_id:
-            flash("You do not have permission to do that!", "danger")
-            return redirect(f"/list/{list.list_id}")       
-        else:
-            db.session.delete(list)
-            db.session.commit()
-            return redirect(f"/user/{g.user.user_id}")
+    if request.method == "POST":  
+        Listings.query.filter_by(list_id=list_id).delete()
+        db.session.delete(list)
+        db.session.commit()
+        return redirect(f"/")
         
-@app.route("/list/<int:list_id>/edit", methods=["GET","POST"])
-def edit_list(list_id):
+@app.route("/list/<int:list_id>/search/", methods=["GET","POST"])
+def search(list_id):
 
     list = List.query.get_or_404(list_id)
 
-    if request.method == "GET":
-        if list.user_id != g.user.user_id:
-            flash("You do not have permission to do that!", "danger")
-            return redirect(f"/list/{list.list_id}")
-        else:
-            return render_template("/list/edit.html", list=list)
-    if request.method == "POST":
-        if list.user_id != g.user.user_id:
-            flash("You do not have permission to do that!", "danger")
-            return redirect(f"/list/{list.list_id}") 
-        else:
-            
+    if list.user_id != g.user.user_id:
+        flash("You do not have permission to do that!", "danger")
+        return redirect(f"/list/{list_id}") 
     
+    if request.method == "GET":
+        search_input = request.args.get('search_input')
+        try:
+            page = int(request.args.get('page'))
+        except:
+            page = 1
+
+        resp = requests.get("https://api.jikan.moe/v4/anime", params={
+            "q": search_input,
+            "sfw":1,
+            "order_by":"popularity",
+            "page": page
+        })
+
+        data = resp.json()
+
+        max_pages = resp.json()['pagination']['last_visible_page']
+        
+        return render_template("/list/search.html", list=list, data=data, search_input=search_input, page=page, max_pages=max_pages)
+
+@app.route("/list/<int:list_id>/add", methods=["GET", "POST"])
+def add_to_list(list_id):
+
+    list = List.query.get_or_404(list_id)
+
+    mal_id = request.args.get('mal_id')
+
+    print(list, mal_id)
+
+    if list.user_id != g.user.user_id:
+        flash("You do not have permission to do that!", "danger")
+        return redirect(f"/list/{list_id}") 
+    
+    if Anime.query.get(mal_id) == None:
+
+        resp = requests.get(f"https://api.jikan.moe/v4/anime/{mal_id}")
+
+
+        anime = Anime(
+            anime_id=resp.json()['data']['mal_id'],
+            anime_image_url=resp.json()['data']['images']['jpg']['image_url'],
+            anime_title=resp.json()['data']['title'],
+            anime_description=(resp.json()['data']['synopsis']).replace('[Written by MAL Rewrite]','')
+        )
+
+        db.session.add(anime)
+        db.session.commit()
+
+    listing = Listings(
+        list_id=list_id,
+        anime_id = resp.json()['data']['mal_id'],
+        listing_description = (resp.json()['data']['synopsis']).replace('[Written by MAL Rewrite]','')
+    )
+
+    db.session.add(listing)
+    db.session.commit()
+
+    return redirect(f"/list/{list_id}")
+
+
+@app.route("/listing/<int:listing_id>/edit/", methods=["GET","POST"])
+def edit_listing(listing_id):
+
+    listing = Listings.query.get_or_404(listing_id)
+
+    if listing.lists.user_id != g.user.user_id:
+        flash("You do not have permission to do that!", "danger")
+        return redirect(f"/list/{listing.lists.list_id}")
+    
+    if request.method == "GET":
+        return render_template("/list/edit_listing.html", listing=listing)
+
+    if request.method == "POST":
+
+        listing_description = request.form.get('listing-description')
+        listing.listing_description = listing_description
+        db.session.add(listing)
+        db.session.commit()
+        return redirect(f"/list/{listing.lists.list_id}")
+    
+@app.route("/listing/<int:listing_id>/delete/", methods=["GET","POST"])
+def delete_listing(listing_id):
+
+    listing = Listings.query.get_or_404(listing_id)
+
+    if listing.lists.user_id != g.user.user_id:
+        flash("You do not have permission to do that!", "danger")
+        return redirect(f"/list/{listing.lists.list_id}")   
+    
+    db.session.delete(listing)
+    db.session.commit()
+    return redirect(f"/list/{listing.lists.list_id}")
+
 
 ######################################################
 # User
 ######################################################
-@app.route("/user/<int:user_id>", methods=["GET","POST"])
+@app.route("/user/<int:user_id>/", methods=["GET","POST"])
 def show_user(user_id):
 
     return render_template("/user/profile.html")
