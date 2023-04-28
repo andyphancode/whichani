@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SelectMultipleField
+from wtforms import StringField, PasswordField, SelectField, BooleanField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, Length
 
 class SignUpForm(FlaskForm):
@@ -16,7 +16,3 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=8)])
 
-class RecommendForm(FlaskForm):
-    """Recommendation form"""
-
-    genres=SelectMultipleField('Genres You Like')
