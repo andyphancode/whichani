@@ -5,12 +5,13 @@
 
 {% block content %}
 <div id="delete-form">
-    <form >
+    <form action="/list/{{list.list_id}}/delete" method="POST">
         <p>Are you sure you want to delete this list?</p>
         <small>(This cannot be undone.)</small>
         <br>
-        <button formaction="/list/{{list.list_id}}/delete" method="POST" id="delete-confirm-btn">Confirm</button>
-        <button formaction="/list/{{list.list_id}}" method="GET" id="delete-return-btn">Nevermind</button>
+        <button id="delete-confirm-btn">Confirm</button>
+        <br>
+        <a href="/list/{{list.list_id}}">Nevermind, take me back</a>
     </form>
 </div>
 
