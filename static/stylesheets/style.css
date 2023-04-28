@@ -189,3 +189,143 @@ body .navbar a {
         font-size: 70%
     }
 }
+
+#recommend-container {
+    width: 40%;
+}
+
+@media (max-height: 1000px) {
+    #recommend-container {
+        width: 60%;
+        margin-top: 300px;
+    }
+}
+
+@media (max-height: 800px) {
+    #recommend-container {
+        width: 80%;
+        margin-top: 400px;
+    }
+}
+
+
+#recommend-container div {
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+#recommend-container button {
+    background-color: #00a6fb;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    height: 3rem;
+}
+
+#recommend-container span {
+    font-size: 2rem;
+}
+
+#recommend-row-1, #recommend-row-3 {
+    background-color: #082838;
+}
+
+#recommend-row-2, #recommend-row-4 {
+    border: solid 1px #082838;
+}
+
+#list-container {
+    width: 75%;
+    margin-top: 75px;
+    overflow: auto;
+    border: solid 1px #082838;
+}
+
+.anime-container {
+        border: solid 1px #082838;
+}
+
+.desc-container {
+    font-size: 90%;
+}
+
+.title-container {
+    font-size: 150%;
+}
+
+#list-container .column-right{
+    word-wrap: break-word;
+}
+
+#list-container img {
+    max-width: 225px;
+    width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+
+
+#list-container::-webkit-scrollbar {
+    width: .75rem;
+}
+
+
+#list-container::-webkit-scrollbar-track {
+
+    border-radius: 100px;
+}
+  
+#list-container::-webkit-scrollbar-thumb {
+    background-color: #00a6fb;
+    border-radius: 100px;
+}
+
+#list-container::-webkit-scrollbar-corner {
+
+}
+
+#list-clipboard{
+    cursor: pointer;
+    padding: 10px;
+    color: white;
+    background-color: transparent;
+    border: solid 1px #082838;
+    border-radius: 10px;
+}
+
+#list-clipboard:hover{
+    background-color: black;
+}
+
+
+#list-url-notif {
+    margin-bottom: 0;
+}
+
+small{
+    color: darkgray;
+}
+
+#delete-form {
+    position: absolute;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 250px;
+    text-align: center;
+    border: solid 1px #082838;
+}
+
+#delete-form button{
+    border: none;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+#delete-confirm-btn {
+    background-color: rgb(226, 45, 45);
+    color: white;
+}
