@@ -106,6 +106,8 @@ class Anime(db.Model):
         nullable=False
     )
 
+    listings = db.relationship('Listings',
+                               backref='anime')
 
 
 
@@ -136,7 +138,8 @@ class List(db.Model):
     anime = db.relationship(
         'Anime',
         secondary='listings',
-        backref='lists'
+        backref='lists',
+        overlaps="anime,listings"
     )
 
     listings = db.relationship('Listings',
