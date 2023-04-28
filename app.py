@@ -1,10 +1,11 @@
 import os
 import random
+import requests
 from flask import Flask, request, render_template, redirect, flash, session, jsonify, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import connect_db, db, User, List, Listings, Anime
-from forms import SignUpForm, LoginForm, RecommendForm
+from forms import SignUpForm, LoginForm
 from app import *
 from secret import API_KEY_CONFIG
 
@@ -19,7 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-db.create_all()
+
 
 ######################################################
 # User signup/login/logout functions
@@ -119,15 +120,125 @@ def login():
 
 @app.route("/recommend", methods=["GET", "POST"])
 def recommend():
+    if request.method == "GET":
+        return render_template("/list/recommend.html")
+    if request.method == "POST":
 
-    form = RecommendForm()
+        limit = 25
+        type = request.form.get('type')
+        if request.form.get('status') == "complete":
+            status = "complete"
+        else:
+            status = "any"
+        genres = ",".join(str(x) for x in request.form.getlist('genre'))
+        min_score = 5
+        sfw = 1
+        order_by = "score" 
+        sort = "desc"
+
+        resp = requests.get("https://api.jikan.moe/v4/anime", params={
+            "limit": limit,
+            "type": type,
+            "status":status,
+            "genres":genres,
+            "min_score":min_score,
+            "sfw":sfw,
+            "order_by":order_by,
+            "sort":sort
+            })
+
+        i = 0
+        while i < len(resp.json()['data']):
+            if Anime.query.get(resp.json()['data'][i]['mal_id']) == None:
+                anime = Anime(
+                    anime_id=resp.json()['data'][i]['mal_id'],
+                    anime_image_url=resp.json()['data'][i]['images']['jpg']['image_url'],
+                    anime_title = resp.json()['data'][i]['title'],
+                    anime_description = (resp.json()['data'][i]['synopsis']).replace('[Written by MAL Rewrite]',''),
+                )
+                db.session.add(anime)
+                db.session.commit()
+            i += 1
+
+        list = List(
+            title="WhichAni Recommendations",
+            description="Sign up to start making your own lists today!",
+            user_id=1
+        )
+
+        db.session.add(list)
+        db.session.commit()
+
+        if len(resp.json()['data']) > 10:
+            random_array = random.sample(range(len(resp.json()['data'])), 10)
+            for num in random_array:
+                listing = Listings(
+                    list_id = list.list_id,
+                    anime_id = resp.json()['data'][num]['mal_id'],
+                    listing_description = (resp.json()['data'][num]['synopsis']).replace('[Written by MAL Rewrite]','')
+                )
+                db.session.add(listing)
+                db.session.commit()
+        return redirect(f"/list/{list.list_id}")
+
+@app.route("/list/<int:list_id>", methods=["GET"])
+def show_list(list_id):
+    print(list_id)
+    list = List.query.get_or_404(list_id)
+
+    print(list.listings[0])
+    print(list.anime)
+
+    return render_template("/list/list.html", list=list)
+
+@app.route("/list/<int:list_id>/delete", methods=["GET","POST"])
+def delete_list(list_id):
+
+    list = List.query.get_or_404(list_id)
 
     if request.method == "GET":
+        if list.user_id != g.user.user_id:
+            flash("You do not have permission to do that!", "danger")
+            return redirect(f"/list/{list.list_id}")
+        else:
+            return render_template("/list/delete.html", list=list)
 
-        return render_template("recommend.html", form=form)
+    if request.method == "POST":
+        if list.user_id != g.user.user_id:
+            flash("You do not have permission to do that!", "danger")
+            return redirect(f"/list/{list.list_id}")       
+        else:
+            db.session.delete(list)
+            db.session.commit()
+            return redirect(f"/user/{g.user.user_id}")
+        
+@app.route("/list/<int:list_id>/edit", methods=["GET","POST"])
+def edit_list(list_id):
+
+    list = List.query.get_or_404(list_id)
+
+    if request.method == "GET":
+        if list.user_id != g.user.user_id:
+            flash("You do not have permission to do that!", "danger")
+            return redirect(f"/list/{list.list_id}")
+        else:
+            return render_template("/list/edit.html", list=list)
+    if request.method == "POST":
+        if list.user_id != g.user.user_id:
+            flash("You do not have permission to do that!", "danger")
+            return redirect(f"/list/{list.list_id}") 
+        else:
+            
     
 
-    random.sample(range(20), 10)
+######################################################
+# User
+######################################################
+@app.route("/user/<int:user_id>", methods=["GET","POST"])
+def show_user(user_id):
+
+    return render_template("/user/profile.html")
+
 
 ######################################################
 # Error page
