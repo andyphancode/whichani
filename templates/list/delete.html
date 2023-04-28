@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+{% block title %} Delete {% endblock %}
+
+{% block content %}
+<div id="delete-form">
+    <form >
+        <p>Are you sure you want to delete this list?</p>
+        <small>(This cannot be undone.)</small>
+        <br>
+        <button formaction="/list/{{list.list_id}}/delete" method="POST" id="delete-confirm-btn">Confirm</button>
+        <button formaction="/list/{{list.list_id}}" method="GET" id="delete-return-btn">Nevermind</button>
+    </form>
+</div>
+
+{% endblock %}
