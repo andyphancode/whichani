@@ -6,9 +6,11 @@
 
 
 
+
 <div id="list-container">
-
-
+    <div id="scrollTopButton" class="text-center">
+        <span class="material-symbols-outlined">expand_less</span>
+    </div>
     <div class="row my-3 justify-content-center">
         {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
@@ -16,6 +18,21 @@
     </div>
     <div class="row no-gutters my-3 justify-content-center">
         <div class="col-md-9 px-3 my-auto">
+            {% if list.user_id == g.user.user_id%}
+            <form action="/list/{{list.list_id}}" method="POST">
+                <div class="title-container-edit">
+                    <input type="text" name="title" value="{{list.title}}">
+                </div>
+                <div class="desc-container-edit">
+                    <textarea style="overflow:auto" name="description" cols="40" rows="5">{{list.description}}</textarea>
+                </div>
+                <button id="list-detail-button">Update List Details</button>
+                <div>
+                <small>All images and synopses retrieved from MyAnimeList.</small>
+                </div>
+
+            </form>
+            {% else %}
             <div class="title-container">
                 <span>{{list.title}}</span>
             </div>
@@ -25,6 +42,7 @@
             <div>
                 <small>All images and synopses retrieved from MyAnimeList.</small>
             </div>
+            {% endif %}
         </div>
         <div class="col-md-3 px-3 text-center my-auto">
             <div>
@@ -33,26 +51,47 @@
             </div>
             <div>
                 {% if list.user_id == g.user.user_id%}
-                    <a href="/list/{{list.list_id}}/edit">Edit this list</a>
-                    <br>
                     <a href="/list/{{list.list_id}}/delete">Delete this list</a>
                 {% endif %}    
             </div>
-            
-
         </div>
     </div>
-    {% for anime in list.anime %} 
+    {% if list.user_id == g.user.user_id%}
+    <div class="row no-gutters my-3 justify-content-center anime-container">
+        <div class="col-md-12 text-center" id="add-anime-row">
+            <a href="/list/{{list.list_id}}/search"><span id="list-add-anime-icon" class="material-symbols-outlined">add_circle</span></a>
+            <br>
+            <h1>Add an Anime</h1>
+        </div>
+    </div>
+    {% endif %}   
+    {% for listing in list.listings %} 
     <div class="row no-gutters my-3 justify-content-center anime-container">
         <div class="col-md-3 text-center column-left">
-            <img src="{{anime.anime_image_url}}" alt="Cover image for {{anime.anime_title}}">
+            <img src="{{listing.anime.anime_image_url}}" alt="Cover image for {{listing.anime_title}}">
+            {% if list.user_id == g.user.user_id%}
+            <div>
+                <a class="list-listing-delete-icon" href="/listing/{{listing.listing_id}}/delete"><span class="material-symbols-outlined">
+                    delete
+                    </span></a>
+            </div>
+            {% endif %}    
         </div>
         <div class="col-md-9 px-3 column-right">
             <div class="title-container">
-                <span>{{anime.anime_title}}</span>
+                <span>{{listing.anime.anime_title}}</span>
             </div>
             <div class="desc-container">
-                <p>{{anime.anime_description}}</p>
+                <p>
+                    {{listing.listing_description}} 
+                    {% if list.user_id == g.user.user_id%}
+                        <a href="/listing/{{listing.listing_id}}/edit">
+                            <span class="material-icons">
+                                edit
+                            </span>
+                        </a>
+                    {% endif %}    
+                </p>
             </div>
         </div>
     </div>
@@ -70,6 +109,21 @@
         document.execCommand("copy");
         temp.remove();
         $("#list-url-notif").text("Copied!")
+    })
+
+    const scrollTopButton = $("#scrollTopButton")
+    $('#list-container').on('scroll', function(){
+        if($('#list-container').scrollTop() > 20){
+            scrollTopButton.css("display","block");
+        }
+        else
+        {
+            scrollTopButton.css("display","none");
+        }
+    })
+
+    scrollTopButton.on('click', function(){
+        $('#list-container').scrollTop(0);
     })
 </script>
 
