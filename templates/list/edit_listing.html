@@ -9,15 +9,15 @@
         <img src="{{listing.anime.anime_image_url}}" alt="{{listing.anime.anime_title}}">
     </div>
     <div class="col-xl-9">
-        <form method="POST">
+        <form>
             <h1>Edit description for {{listing.anime.anime_title}}</h1>
             <label for="listing-description"></label>
             <div class="break"></div>
             <textarea name="listing-description" id="listing-description" cols="30" rows="10" placeholder="{{listing.listing_description}}">{{listing.listing_description}}</textarea>
             <div class="break"></div>
-            <button formaction="/listing/{{listing.listing_id}}/edit" method="POST">Edit</button>
+            <button formaction="/listing/{{listing.listing_id}}/edit" formmethod="POST">Edit</button>
             <button formaction="/listing/{{listing.listing_id}}/delete" id="delete-listing-btn">Delete</button>
-            <button formaction="/list/{{listing.lists.list_id}}" method="GET">Nevermind</button>
+            <button formaction="/list/{{listing.lists.list_id}}" formmethod="GET">Nevermind</button>
 
         </form>        
     </div>
