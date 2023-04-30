@@ -122,6 +122,16 @@ def login():
 def new_list():
     """Create an empty new list."""
 
+    list = List(
+            title="",
+            description="",
+            user_id=g.user.user_id
+        )
+    db.session.add(list)
+    db.session.commit()
+
+    return redirect(f"/list/{list.list_id}")
+
 
 @app.route("/recommend/", methods=["GET", "POST"])
 def recommend():
@@ -329,7 +339,8 @@ def delete_listing(listing_id):
 @app.route("/user/<int:user_id>/", methods=["GET","POST"])
 def show_user(user_id):
 
-    return render_template("/user/profile.html")
+    user = User.query.get_or_404(user_id)
+    return render_template("/user/profile.html", user=user)
 
 
 ######################################################
