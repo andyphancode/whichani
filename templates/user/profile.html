@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} {{user.username}} {% endblock %}
+
+{% block content %}
+
+
+<div id="profile-container">
+    <div class="row no-gutters my-3 justify-content-center anime-container">
+        <div class="col-md-3">
+            <div id="profile_image">            <img src="{{user.profile_image_url}}" alt="Image for {{user.username}}"></div>
+
+        </div>
+        <div class="col-md-9 text-left">
+            <h1>About Me</h1>
+            <p>{{user.about_me}}</p>
+        </div>
+    </div>    
+</div>
+{% endblock %}
+
+<!-- {% for list in user.lists %}
+{{list.title}}
+{% endfor %} -->
