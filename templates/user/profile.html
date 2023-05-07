@@ -6,19 +6,48 @@
 
 
 <div id="profile-container">
-    <div class="row no-gutters my-3 justify-content-center anime-container">
-        <div class="col-md-3">
-            <div id="profile_image">            <img src="{{user.profile_image_url}}" alt="Image for {{user.username}}"></div>
+    <div class="row my-3 justify-content-center">
+        <div class="col-xl-3" >
+            <div class="row">
+                <div class="d-flex justify-content-center profile-pocket" id="profile-pocket-1">
+                    <img src="{{user.profile_image_url}}" alt="Image for {{user.username}}">
+                    <div class="break"></div>
+                    <h2>{{user.username}}</h2>
+                    {% if user.user_id == g.user.user_id%}
+                    <div class="break"></div>
+                    <a href="/user/{{user.user_id}}/edit">Edit profile/settings</a>                    
+                    {% endif %}
 
+                </div>                   
+            </div>
+            <div class="row">
+                <div class="profile-pocket text-left" id="profile-pocket-3">
+                    <h2>About Me</h2>
+                    <p>{{user.about_me}}</p>
+                </div>
+            </div>
+        
         </div>
-        <div class="col-md-9 text-left">
-            <h1>About Me</h1>
-            <p>{{user.about_me}}</p>
+        <div class="col-xl-9 text-left" >
+            <div class="profile-pocket" id="profile-pocket-2">
+                <h1>Lists by user</h1>
+                <hr>
+                {% for list in user.lists %}
+                    {% if list.title != "" %}
+                    <a href="/list/{{list.list_id}}">{{list.title}}</a>
+                    <div class="break"></div>
+                    <small>{{list.description}}</small>
+                    <hr>
+                    {% else %}
+                    <a href="/list/{{list.list_id}}">Untitled</a>
+                    <div class="break"></div>
+                    <small>{{list.description}}</small>
+                    <hr>
+                    {% endif %}
+                    
+                {% endfor %}
+            </div>
         </div>
     </div>    
 </div>
 {% endblock %}
-
-<!-- {% for list in user.lists %}
-{{list.title}}
-{% endfor %} -->
