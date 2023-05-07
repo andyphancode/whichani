@@ -344,15 +344,44 @@ def edit_user(user_id):
 
     form = EditUserForm()
 
-    if form.validate_on_submit():
+    if not g.user:
+        return redirect(f"/user/{user_id}")
+
+    if request.method == "POST":
+
         email = form.email.data
         profile_image_url = form.profile_image_url.data
         old_password = form.old_password.data
         new_password = form.new_password.data
         new_password_confirm = form.new_password_confirm.data
 
-    if not g.user:
-        return redirect(f"/user/{user_id}")   
+        if profile_image_url == "":
+            profile_image_url = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+
+        if new_password != new_password_confirm:
+            flash("New passwords do not match!", "danger")
+            return redirect(f"/user/{user_id}/edit")
+        
+        user_edit = User.authenticate(g.user.username, old_password)
+
+        if user_edit:
+            user_edit.email = email
+            user_edit.profile_image_url = profile_image_url
+
+            db.session.add(user_edit)
+            db.session.commit()
+            flash("Settings successfully changed.","success")
+            if new_password != "":
+                success = User.update_password(user_edit.username, new_password)
+                if success:
+                    flash("Password successfully changed.","success")
+
+        else: 
+            flash("Incorrect credentials.", "danger")
+        
+
+        return redirect(f"/user/{user_id}/edit")
+       
     return render_template("/user/edit_profile.html", form=form, user=user)    
 
 ######################################################
