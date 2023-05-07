@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} {{user.username}} {% endblock %}
+
+{% block content %}
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    {{form.email.label.text}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        <label for="{{field.name}}">{{ field.label.text }}</label>
+        <div class="break"></div>
+        {{ field }}
+        <div class="break"></div>
+    {% endfor %}
+    <button>Log In</button>
+</form>
+{% endblock %}
