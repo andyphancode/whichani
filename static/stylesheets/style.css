@@ -270,11 +270,16 @@ body .navbar a {
     border: solid 1px #082838;
 }
 
-#list-container, #search-container, #profile-container {
+#list-container, #search-container{
     width: 75%;
     margin-top: 75px;
     overflow: auto;
     border: solid 1px #082838;
+}
+
+#profile-container {
+    width: 75%;
+    margin-top: 75px;
 }
 
 #add-anime-row a{
@@ -519,12 +524,35 @@ small{
     text-align: center;
 }
 
-#profile-image{
-    height: 150px;
-    width: 150px;
+
+#profile-pocket-1 img{
+    max-width:75%;
+    max-height:75%;
+    border-radius: 150px;
+    margin-bottom: 10px;
+
 }
 
-#profile-image img{
-    max-width:100%;
-    max-height:100%;
+.profile-pocket {
+    background-color: #003554;
+    border-radius: 15px;
+}
+
+#profile-pocket-1{
+    width: 300px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+#profile-pocket-2 {
+    background-color: #011d2e;
+    padding: 20px;
+}
+
+#profile-pocket-3 {
+    width: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
 }
