@@ -3,20 +3,34 @@
 {% block title %} {{user.username}} {% endblock %}
 
 {% block content %}
-<form method="POST">
-    {{ form.hidden_tag() }}
-
-    {{form.email.label.text}}
-
-    {% for field in form if field.widget.input_type != 'hidden' %}
-        {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-        <label for="{{field.name}}">{{ field.label.text }}</label>
-        <div class="break"></div>
-        {{ field }}
-        <div class="break"></div>
+<div class="user-container">
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
     {% endfor %}
-    <button>Log In</button>
-</form>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label for="{{form.old_password.name}}">{{ form.old_password.label.text }}</label>
+        <div class="break"></div>    
+        {{form.old_password}}
+        <div class="break"></div>
+        <label for="{{form.email.name}}">{{ form.email.label.text }}</label>
+        <div class="break"></div>    
+        {{form.email(value="%s" % user.email)}}
+        <div class="break"></div>
+        <label for="{{form.profile_image_url.name}}">{{ form.profile_image_url.label.text }}</label>
+        <div class="break"></div>    
+        {{form.profile_image_url(value="%s" % user.profile_image_url)}}
+        <div class="break"></div>
+        <label for="{{form.new_password.name}}">{{ form.new_password.label.text }}</label>
+        <div class="break"></div>    
+        {{form.new_password}}
+        <div class="break"></div>
+        <label for="{{form.new_password_confirm.name}}">{{ form.new_password_confirm.label.text }}</label>
+        <div class="break"></div>    
+        {{form.new_password_confirm}}
+        <div class="break"></div>
+        <button>Save</button>
+    </form>    
+</div>
+
 {% endblock %}
