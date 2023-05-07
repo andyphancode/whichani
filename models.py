@@ -70,6 +70,20 @@ class User(db.Model):
 
         db.session.add(user)
         return user
+    
+    @classmethod
+    def update_password(cls, username, new_password):
+        """Update user with new password"""
+
+        user = cls.query.filter_by(username=username).first()
+
+        hashed_pwd = bcrypt.generate_password_hash(new_password).decode('UTF-8')
+
+        user.password = hashed_pwd
+
+        db.session.add(user)
+        db.session.commit()
+        return user
 
     @classmethod
     def authenticate(cls, username, password):
