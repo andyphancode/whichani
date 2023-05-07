@@ -5,7 +5,7 @@ from flask import Flask, request, render_template, redirect, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import connect_db, db, User, List, Listings, Anime
-from forms import SignUpForm, LoginForm
+from forms import SignUpForm, LoginForm, EditUserForm
 from app import *
 from secret import API_KEY_CONFIG
 
@@ -217,8 +217,7 @@ def delete_list(list_id):
 
     list = List.query.get_or_404(list_id)
 
-    if list.user_id != g.user.user_id:
-        flash("You do not have permission to do that!", "danger")
+    if not g.user:
         return redirect(f"/list/{list_id}")
     
     if request.method == "GET":
@@ -228,15 +227,14 @@ def delete_list(list_id):
         Listings.query.filter_by(list_id=list_id).delete()
         db.session.delete(list)
         db.session.commit()
-        return redirect(f"/")
+        return redirect(f"/user/{list.user_id}")
         
 @app.route("/list/<int:list_id>/search/", methods=["GET","POST"])
 def search(list_id):
 
     list = List.query.get_or_404(list_id)
 
-    if list.user_id != g.user.user_id:
-        flash("You do not have permission to do that!", "danger")
+    if not g.user:
         return redirect(f"/list/{list_id}") 
     
     if request.method == "GET":
@@ -268,8 +266,7 @@ def add_to_list(list_id):
 
     print(list, mal_id)
 
-    if list.user_id != g.user.user_id:
-        flash("You do not have permission to do that!", "danger")
+    if not g.user:
         return redirect(f"/list/{list_id}") 
     
     if Anime.query.get(mal_id) == None:
@@ -304,8 +301,7 @@ def edit_listing(listing_id):
 
     listing = Listings.query.get_or_404(listing_id)
 
-    if listing.lists.user_id != g.user.user_id:
-        flash("You do not have permission to do that!", "danger")
+    if not g.user:
         return redirect(f"/list/{listing.lists.list_id}")
     
     if request.method == "GET":
@@ -324,8 +320,7 @@ def delete_listing(listing_id):
 
     listing = Listings.query.get_or_404(listing_id)
 
-    if listing.lists.user_id != g.user.user_id:
-        flash("You do not have permission to do that!", "danger")
+    if not g.user:
         return redirect(f"/list/{listing.lists.list_id}")   
     
     db.session.delete(listing)
@@ -342,6 +337,23 @@ def show_user(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("/user/profile.html", user=user)
 
+@app.route("/user/<int:user_id>/edit/", methods=["GET","POST"])
+def edit_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    form = EditUserForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        profile_image_url = form.profile_image_url.data
+        old_password = form.old_password.data
+        new_password = form.new_password.data
+        new_password_confirm = form.new_password_confirm.data
+
+    if not g.user:
+        return redirect(f"/user/{user_id}")   
+    return render_template("/user/edit_profile.html", form=form, user=user)    
 
 ######################################################
 # Error page
