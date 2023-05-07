@@ -21,7 +21,7 @@ class EditUserForm(FlaskForm):
 
     email = StringField('E-mail', validators=[Email()])
     profile_image_url = StringField('Profile Image URL')
-    old_password = PasswordField('Old Password')
+    old_password = PasswordField('Old Password (Required)')
     new_password = PasswordField('New Password', validators=[Length(min=8)])
     new_password_confirm = PasswordField('Confirm New Password', validators=[Length(min=8)])
     
