@@ -22,8 +22,14 @@
             </div>
             <div class="row">
                 <div class="profile-pocket text-left" id="profile-pocket-3">
-                    <h2>About Me</h2>
-                    <p>{{user.about_me}}</p>
+                    <h2>About Me &nbsp<span id="about-me-edit" class="material-icons">edit</span></h2>
+                    <p id="about-me-text">{{user.about_me}}</p>
+                    <form method="POST">
+                        <div id="about-me-edit-container">
+                            <textarea style="overflow:auto" name="about_me" rows="5">{{user.about_me}}</textarea>
+                        </div>
+                        <button id="about-me-button">Update</button>
+                    </form>
                 </div>
             </div>
         
@@ -50,4 +56,12 @@
         </div>
     </div>    
 </div>
+
+<script>
+    $('#about-me-edit').on('click', function(){
+        $('#about-me-text').hide();
+        $('#about-me-edit-container').show();
+        $('#about-me-button').show();
+    });
+</script>
 {% endblock %}
