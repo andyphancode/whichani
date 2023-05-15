@@ -157,8 +157,7 @@ class List(db.Model):
     )
 
     listings = db.relationship('Listings',
-                               backref='lists',
-                               overlaps="anime,lists")
+                               backref='lists')
 
 class Listings(db.Model):
 
