@@ -295,15 +295,19 @@ body .navbar a {
     border: solid 1px #082838;
 }
 
-.desc-container, .desc-container-edit {
+.desc-container, .desc-container-edit, #about-me-edit-container {
     font-size: 90%;
+}
+
+#about-me-edit-container, #about-me-button {
+    display: none;
 }
 
 .title-container, .title-container-edit {
     font-size: 150%;
 }
 
-#list-container input[type="text"], #list-container textarea{
+#list-container input[type="text"], #list-container textarea, #about-me-edit-container textarea{
     background-color: transparent;
     color: white;
     border: solid 1px #00a6fb;
@@ -313,6 +317,10 @@ body .navbar a {
 
 #list-container textarea {
     width: 50%;
+}
+
+#about-me-edit-container textarea{
+    width: 90%;
 }
 
 #list-container img {
@@ -329,7 +337,7 @@ body .navbar a {
     font-size: 40px;
 }
 
-#list-detail-button {
+#list-detail-button, #about-me-button {
     border: solid 1px #00a6fb;
     background-color:rgba(49, 58, 87, 0.459);
     color: white;
@@ -353,21 +361,25 @@ body .navbar a {
 }
 
 
-#list-container::-webkit-scrollbar, #search-container::-webkit-scrollbar {
+#list-container::-webkit-scrollbar,
+#search-container::-webkit-scrollbar, #list-container textarea::-webkit-scrollbar, #about-me-edit-container textarea::-webkit-scrollbar {
     width: .75rem;
 }
 
 
-#list-container::-webkit-scrollbar-track, #search-container::-webkit-scrollbar-track {
+#list-container::-webkit-scrollbar-track, #search-container::-webkit-scrollbar-track,
+ #list-container textarea::-webkit-scrollbar-track, #about-me-edit-container textarea::-webkit-scrollbar-track {
     border-radius: 100px;
 }
   
-#list-container::-webkit-scrollbar-thumb, #search-container::-webkit-scrollbar-thumb {
+#list-container::-webkit-scrollbar-thumb, #search-container::-webkit-scrollbar-thumb,
+#list-container textarea::-webkit-scrollbar-thumb, #about-me-edit-container textarea::-webkit-scrollbar-thumb {
     background-color: #00a6fb;
     border-radius: 100px;
 }
 
-#list-container::-webkit-scrollbar-corner, #search-container::-webkit-scrollbar-corner {
+#list-container::-webkit-scrollbar-corner, #search-container::-webkit-scrollbar-corner,
+#list-container textarea::-webkit-scrollbar-corner, #about-me-edit-container textarea::-webkit-scrollbar-corner {
     background: transparent;
 }
 
@@ -555,4 +567,5 @@ small{
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 20px;
+    word-wrap: break-word;
 }
