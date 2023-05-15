@@ -21,12 +21,12 @@
             {% if list.user_id == g.user.user_id%}
             <form action="/list/{{list.list_id}}" method="POST">
                 <div class="title-container-edit">
-                    <input type="text" name="title" value="{{list.title}}">
+                    <input type="text" name="title" placeholder="Give your list a name!" value="{{list.title}}">
                 </div>
                 <div class="desc-container-edit">
-                    <textarea style="overflow:auto" name="description" cols="40" rows="5">{{list.description}}</textarea>
+                    <textarea style="overflow:auto" name="description" cols="40" rows="5" placeholder="Write a description for your list here.">{{list.description}}</textarea>
                 </div>
-                <button id="list-detail-button">Update List Details</button>
+                <button id="list-detail-button">Update</button>
                 <div>
                 <small>All images and synopses retrieved from MyAnimeList.</small>
                 </div>
