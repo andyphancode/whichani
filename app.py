@@ -335,7 +335,17 @@ def delete_listing(listing_id):
 def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
+
+    if request.method == "POST":
+        about_me = request.form.get('about_me')
+        user.about_me = about_me
+        db.session.add(user)
+        db.session.commit()
+
+
     return render_template("/user/profile.html", user=user)
+    
+
 
 @app.route("/user/<int:user_id>/edit/", methods=["GET","POST"])
 def edit_user(user_id):
