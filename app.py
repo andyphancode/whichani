@@ -394,6 +394,18 @@ def edit_user(user_id):
        
     return render_template("/user/edit_profile.html", form=form, user=user)    
 
+@app.route("/user/<int:user_id>/delete", methods=["POST"])
+def delete_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    if not g.user:
+        return redirect(f"/user/{user_id}")
+    
+    db.session.delete(user)
+    db.session.commit()
+    return redirect("/")
+
 ######################################################
 # Error page
 ######################################################
