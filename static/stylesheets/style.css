@@ -164,10 +164,9 @@ body .navbar a {
     color: white;
 }
 
-.user-container button{
+.user-container button {
     margin-top: 1rem;
     margin-bottom: 1rem; 
-    border: none;
     color: white;
     border: solid 1px white;
     height: 15%;
@@ -568,4 +567,45 @@ small{
     margin-bottom: 10px;
     padding: 20px;
     word-wrap: break-word;
+}
+
+#delete-user-button, #delete-user-confirm-btn {
+    cursor: pointer;
+    color: white;
+    border: solid 1px white;
+    width: 30%;
+    background-color: rgba(228, 36, 36, 0.712);
+}
+
+#delete-user-return-btn {
+    background: transparent;
+    cursor: pointer;
+    color: white;
+    border: solid 1px white;
+}
+
+#delete-user-confirmation {
+    position: fixed;
+    margin: auto;
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    display: none;
+}
+
+
+
+#delete-user-confirmation p {
+    margin-bottom: 0;
+}
+
+#delete-input-confirm {
+    background: transparent;
+    border-radius: 10px;
+    border: solid 1px white;
+    margin-bottom: 5px;
+    color: white;
 }
