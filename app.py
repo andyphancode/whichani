@@ -273,7 +273,6 @@ def add_to_list(list_id):
 
         resp = requests.get(f"https://api.jikan.moe/v4/anime/{mal_id}")
 
-
         anime = Anime(
             anime_id=resp.json()['data']['mal_id'],
             anime_image_url=resp.json()['data']['images']['jpg']['image_url'],
@@ -284,14 +283,27 @@ def add_to_list(list_id):
         db.session.add(anime)
         db.session.commit()
 
-    listing = Listings(
-        list_id=list_id,
-        anime_id = resp.json()['data']['mal_id'],
-        listing_description = (resp.json()['data']['synopsis']).replace('[Written by MAL Rewrite]','')
-    )
+        listing = Listings(
+            list_id=list_id,
+            anime_id = resp.json()['data']['mal_id'],
+            listing_description = (resp.json()['data']['synopsis']).replace('[Written by MAL Rewrite]','')
+        )
 
-    db.session.add(listing)
-    db.session.commit()
+        db.session.add(listing)
+        db.session.commit()
+    
+    else: 
+
+        anime = Anime.query.get(mal_id)
+        print(anime)
+        listing = Listings(
+            list_id=list_id,
+            anime_id = anime.anime_id,
+            listing_description = anime.anime_description
+        )
+
+        db.session.add(listing)
+        db.session.commit()
 
     return redirect(f"/list/{list_id}")
 
