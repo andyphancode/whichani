@@ -127,29 +127,29 @@ def search(list_id):
     if not g.user:
         return redirect(f"/list/{list_id}") 
     
-    if request.method == "GET":
-        search_input = request.args.get('search_input')
-        if search_input == None:
-            # Setting default to search_input (seems to fix first search returning None)
-            search_input = "Bocchi"
 
-        try:
-            page = int(request.args.get('page'))
-        except:
-            page = 1
+    search_input = request.args.get('search_input')
+    if search_input == None:
+        # Setting default to search_input (seems to fix first search returning None)
+        search_input = "Bocchi"
 
-        resp = requests.get("https://api.jikan.moe/v4/anime", params={
+    try:
+        page = int(request.args.get('page'))
+    except:
+        page = 1
+
+    resp = requests.get("https://api.jikan.moe/v4/anime", params={
             "q": search_input,
             "sfw":1,
             "order_by":"popularity",
             "page": page
         })
 
-        data = resp.json()
+    data = resp.json()
 
-        max_pages = resp.json()['pagination']['last_visible_page']
+    max_pages = resp.json()['pagination']['last_visible_page']
         
-        return render_template("/list/search.html", list=list, data=data, search_input=search_input, page=page, max_pages=max_pages)
+    return render_template("/list/search.html", list=list, data=data, search_input=search_input, page=page, max_pages=max_pages)
 
 @lists.route("/list/<int:list_id>/add", methods=["GET", "POST"])
 def add_to_list(list_id):
