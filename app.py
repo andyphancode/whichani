@@ -79,7 +79,7 @@ def signup():
             db.session.commit()
 
         except IntegrityError:
-            flash("Username unavailable!", "danger")
+            flash("Username or email unavailable!", "danger")
             return render_template('/user/signup.html', form=form)
         
         do_login(user)
