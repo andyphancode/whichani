@@ -77,8 +77,8 @@ body .navbar a {
 }
 
 .navbar li a img {
+    clip-path: circle();
     width: 2rem;
-    border-radius: 2rem;
 }
 
 
@@ -537,9 +537,9 @@ small{
 
 
 #profile-pocket-1 img{
-    max-width:75%;
-    max-height:75%;
-    border-radius: 150px;
+    max-width:65%;
+    max-height:65%;
+    clip-path: circle();
     margin-bottom: 10px;
 
 }
