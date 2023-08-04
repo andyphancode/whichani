@@ -537,8 +537,7 @@ small{
 
 
 #profile-pocket-1 img{
-    max-width:65%;
-    max-height:65%;
+    max-width:55%;
     clip-path: circle();
     margin-bottom: 10px;
 
@@ -550,15 +549,16 @@ small{
 }
 
 #profile-pocket-1{
-    width: 300px;
     align-items: center;
     flex-wrap: wrap;
     padding: 10px;
+    width: 300px;
 }
 
 #profile-pocket-2 {
     background-color: #011d2e;
     padding: 20px;
+    margin: 20px;
 }
 
 #profile-pocket-3 {
