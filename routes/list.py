@@ -27,16 +27,17 @@ def new_list():
 
 @list.route("/recommend/", methods=["GET", "POST"])
 def recommend():
+
     if request.method == "GET":
+
         return render_template("/list/recommend.html")
+    
     if request.method == "POST":
 
+        # parameters for recommendations
         limit = 25
         type = request.form.get('type')
-        if request.form.get('status') == "complete":
-            status = "complete"
-        else:
-            status = "any"
+        status = request.form.get('status')
         genres = ",".join(str(x) for x in request.form.getlist('genre'))
         min_score = 5
         sfw = 1
