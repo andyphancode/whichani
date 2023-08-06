@@ -1,4 +1,5 @@
 import requests
+import random
 from flask import request, render_template, redirect, g, Blueprint
 from models import db, List, Listings, Anime
 
@@ -69,7 +70,7 @@ def recommend():
         list = List(
             title="WhichAni Recommendations",
             description="Sign up to start making your own lists today!",
-            user_id=1
+            user_id= g.user.user_id if g.user else 1
         )
 
         db.session.add(list)
