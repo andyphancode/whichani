@@ -70,6 +70,10 @@ def signup():
 
     form = SignUpForm()
 
+    # if already logged in
+    if g.user:
+        return redirect("/")
+
     if form.validate_on_submit():
         try:
             user = User.signup(
@@ -103,6 +107,10 @@ def login():
     """Login a user."""
 
     form = LoginForm()
+
+    # if already logged in
+    if g.user:
+        return redirect("/")
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
