@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 CURR_USER_KEY = "curr_user"
 
-auth = Blueprint('auth', __name__,template_folder='routes')
+auth = Blueprint('auth', __name__, template_folder='routes')
 
 
 ######################################################
