@@ -1,14 +1,15 @@
-from flask import Flask, request, render_template, redirect, flash, session, jsonify, g, Blueprint
-from models import connect_db, db, User, List, Listings, Anime
 import requests
+from flask import request, render_template, redirect, g, Blueprint
+from models import db, List, Listings, Anime
 
-lists = Blueprint('lists', __name__,template_folder='routes')
+
+list = Blueprint('list', __name__,template_folder='routes')
 
 ######################################################
 # List functions
 ######################################################
 
-@lists.route("/new_list/")
+@list.route("/new_list/")
 def new_list():
     """Create an empty new list."""
 
@@ -23,7 +24,7 @@ def new_list():
     return redirect(f"/list/{list.list_id}")
 
 
-@lists.route("/recommend/", methods=["GET", "POST"])
+@list.route("/recommend/", methods=["GET", "POST"])
 def recommend():
     if request.method == "GET":
         return render_template("/list/recommend.html")
@@ -86,7 +87,7 @@ def recommend():
                 db.session.commit()
         return redirect(f"/list/{list.list_id}")
 
-@lists.route("/list/<int:list_id>/", methods=["GET", "POST"])
+@list.route("/list/<int:list_id>/", methods=["GET", "POST"])
 def show_list(list_id):
 
     list = List.query.get_or_404(list_id)
@@ -102,7 +103,7 @@ def show_list(list_id):
         db.session.commit()
         return redirect(f"/list/{list_id}")
 
-@lists.route("/list/<int:list_id>/delete/", methods=["GET", "POST"])
+@list.route("/list/<int:list_id>/delete/", methods=["GET", "POST"])
 def delete_list(list_id):
 
     list = List.query.get_or_404(list_id)
@@ -119,7 +120,7 @@ def delete_list(list_id):
         db.session.commit()
         return redirect(f"/user/{list.user_id}")
         
-@lists.route("/list/<int:list_id>/search/", methods=["GET","POST"])
+@list.route("/list/<int:list_id>/search/", methods=["GET","POST"])
 def search(list_id):
 
     list = List.query.get_or_404(list_id)
@@ -151,7 +152,7 @@ def search(list_id):
         
     return render_template("/list/search.html", list=list, data=data, search_input=search_input, page=page, max_pages=max_pages)
 
-@lists.route("/list/<int:list_id>/add", methods=["GET", "POST"])
+@list.route("/list/<int:list_id>/add", methods=["GET", "POST"])
 def add_to_list(list_id):
 
     list = List.query.get_or_404(list_id)
@@ -202,7 +203,7 @@ def add_to_list(list_id):
     return redirect(f"/list/{list_id}")
 
 
-@lists.route("/listing/<int:listing_id>/edit/", methods=["GET","POST"])
+@list.route("/listing/<int:listing_id>/edit/", methods=["GET","POST"])
 def edit_listing(listing_id):
 
     listing = Listings.query.get_or_404(listing_id)
@@ -221,7 +222,7 @@ def edit_listing(listing_id):
         db.session.commit()
         return redirect(f"/list/{listing.lists.list_id}")
     
-@lists.route("/listing/<int:listing_id>/delete/", methods=["GET","POST"])
+@list.route("/listing/<int:listing_id>/delete/", methods=["GET","POST"])
 def delete_listing(listing_id):
 
     listing = Listings.query.get_or_404(listing_id)

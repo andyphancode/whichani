@@ -2,7 +2,7 @@ import os
 import random
 import requests
 from flask import Flask, request, render_template, redirect, flash, session, jsonify, g
-from routes.lists import lists
+from routes.list import list
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import connect_db, db, User, List, Listings, Anime
@@ -13,7 +13,7 @@ from secret import API_KEY_CONFIG
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__) 
-app.register_blueprint(lists)
+app.register_blueprint(list)
 app.app_context().push() 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', API_KEY_CONFIG)
 # debug = DebugToolbarExtension(app)
