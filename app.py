@@ -173,16 +173,20 @@ def edit_user(user_id):
         user_edit = User.authenticate(g.user.username, old_password)
 
         if user_edit:
-            user_edit.email = email
-            user_edit.profile_image_url = profile_image_url
+            try:
+                user_edit.email = email
+                user_edit.profile_image_url = profile_image_url
 
-            db.session.add(user_edit)
-            db.session.commit()
-            flash("Settings successfully changed.","success")
-            if new_password != "":
-                success = User.update_password(user_edit.username, new_password)
-                if success:
-                    flash("Password successfully changed.","success")
+                db.session.add(user_edit)
+                db.session.commit()
+                flash("Settings successfully changed.","success")
+                if new_password != "":
+                    success = User.update_password(user_edit.username, new_password)
+                    if success:
+                        flash("Password successfully changed.","success")
+            except IntegrityError:
+                flash("Email already in use!", "danger")
+                return redirect(f"/user/{user_id}/edit") 
 
         else: 
             flash("Incorrect credentials.", "danger")
