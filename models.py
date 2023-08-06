@@ -44,7 +44,8 @@ class User(db.Model):
     )
 
     about_me = db.Column(
-        db.Text
+        db.Text,
+        default="Tell everyone about yourself!"
     )
 
     lists = db.relationship('List',
