@@ -1,8 +1,8 @@
 import os
-import random
 import requests
 from flask import Flask, request, render_template, redirect, flash, session, jsonify, g
 from routes.list import list
+from routes.auth import auth
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import connect_db, db, User, List, Listings, Anime
@@ -14,6 +14,7 @@ CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__) 
 app.register_blueprint(list)
+app.register_blueprint(auth)
 app.app_context().push() 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', API_KEY_CONFIG)
 # debug = DebugToolbarExtension(app)
@@ -25,7 +26,7 @@ connect_db(app)
 
 
 ######################################################
-# User signup/login/logout functions
+# Session handler
 ######################################################
 
 @app.before_request
@@ -39,18 +40,6 @@ def add_user_to_g():
         g.user = None
 
 
-def do_login(user):
-    """Log in user."""
-
-    session[CURR_USER_KEY] = user.user_id
-
-
-def do_logout():
-    """Logout user."""
-
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-
 ######################################################
 # Home
 ######################################################
@@ -60,70 +49,6 @@ def home():
     """Render homepage based on login status."""
 
     return render_template('home.html')
-
-######################################################
-# User signup/login/logout view functions
-######################################################
-
-@app.route('/signup/', methods=["GET", "POST"])
-def signup():
-
-    form = SignUpForm()
-
-    # if already logged in
-    if g.user:
-        return redirect("/")
-
-    if form.validate_on_submit():
-        try:
-            user = User.signup(
-                username = form.username.data,
-                password = form.password.data,
-                email = form.email.data,
-                profile_image_url= form.profile_image_url.data or User.profile_image_url.default.arg
-            )
-            db.session.commit()
-
-        except IntegrityError:
-            flash("Username or email unavailable!", "danger")
-            return render_template('/user/signup.html', form=form)
-        
-        do_login(user)
-
-        return redirect("/")
-        
-    else: 
-        return render_template('/user/signup.html', form=form)
-
-@app.route('/logout/', methods=["GET"])
-def logout():
-    """Logout a user."""
-
-    do_logout()
-    return redirect("/")
-
-@app.route('/login/', methods=["GET", "POST"])
-def login():
-    """Login a user."""
-
-    form = LoginForm()
-
-    # if already logged in
-    if g.user:
-        return redirect("/")
-
-    if form.validate_on_submit():
-        user = User.authenticate(form.username.data,
-                                 form.password.data)
-        
-        if user:
-            do_login(user)
-            return redirect("/")
-        
-        flash("Invalid credentials.", 'danger')
-
-    return render_template('/user/login.html', form=form)
-
 
 
 ######################################################
