@@ -555,18 +555,24 @@ small{
     width: 300px;
 }
 
-#profile-pocket-2 {
-    background-color: #011d2e;
-    padding: 20px;
-    margin: 20px;
+#profile-pocket-1 p {
+    font-size: 2vw;
 }
 
-#profile-pocket-3 {
+
+
+#profile-pocket-2 {
     width: 300px;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 20px;
     word-wrap: break-word;
+}
+
+#profile-pocket-3 {
+    background-color: #011d2e;
+    padding: 20px;
+    margin: 20px;
 }
 
 #delete-user-button, #delete-user-confirm-btn {
