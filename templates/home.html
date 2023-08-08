@@ -21,9 +21,13 @@
         <div class="card home-card border-light" id="home-card-one">
             <img src="static/images/sousuke_card.png" class="card-img" alt="Get Started!">
             <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
-                <h4 class="card-title ">Get Started</h4>
+                <h3 class="card-title">Get Started</h3>
                 <hr>
-                <p class="card-text">Generate a list based off your preferences! </p>
+                <p class="card-text">Generate a list based off your preferences!</p>
+                <hr>
+                <span class="material-symbols-outlined">
+                    science
+                </span>
                 <a href="/recommend" class="stretched-link"></a>
             </div>
         </div>
@@ -32,15 +36,24 @@
         {% if not g.user %}
         <div class="card home-card border-light" id="home-card-two">
             <img src="static/images/mitsumi_card.png" class="card-img" alt="Signup!">
-            <div class="card-body card-img-overlay">
+            <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
+                <h3 class="card-title">Sign Up</h3>
+                <hr>
+                <p class="card-text">Sign up to start making your own lists!</p>
+                <hr>
+                <span class="material-symbols-outlined">person_add</span>
                 <a href="/signup" class="stretched-link"></a>
             </div>
         </div>
         {% else %}
         <div class="card home-card border-light" id="home-card-two">
             <img src="static/images/mitsumi_card.png" class="card-img" alt="Make a List!">
-            <div class="card-body card-img-overlay">
-                hello
+            <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
+                <h3 class="card-title">Create a List</h3>
+                <hr>
+                <p class="card-text">Start making and sharing your own list today!</p>
+                <hr>
+                <span class="material-symbols-outlined">view_list</span>
                 <a href="/new_list" class="stretched-link"></a>
             </div>
         </div>
