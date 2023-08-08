@@ -28,10 +28,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
-                {% else %}         
+                {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" id="user-profile-link-nav" href="/user/{{ g.user.user_id }}">
-                        <img src="{{ g.user.profile_image_url}}" alt="{{ g.user.username}}">
+                    <a class="nav-link" id="nav-profile-image-link" href="/user/{{ g.user.user_id }}">
+                        <img id="nav-profile-image" src="{{ g.user.profile_image_url }}" alt="{{ g.user.username }}">
+                    </a>
+                </li>            
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/{{ g.user.user_id }}">
                         <span>{{ g.user.username }}</span>
                     </a>
                 </li>       
