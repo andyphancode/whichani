@@ -16,7 +16,6 @@ body::-webkit-scrollbar {
 
 hr {
     width: 100%;
-    margin: 0;
 }
 
 /* --- ---  */
@@ -52,6 +51,11 @@ hr {
     color: white;
 }
 
+#logout-icon {
+    filter: invert(1);
+    padding-bottom: 5px;
+}
+
 /* --- ---  */
 
 /* --- Home --- */
@@ -70,7 +74,8 @@ hr {
 
 .home-card {
     border: solid white 3px;
-    color: white;
+    color: #fff;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     vertical-align: middle;
 }
 
