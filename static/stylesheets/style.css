@@ -2,6 +2,21 @@
 body {
     padding-top: 60px;
     background-color: #051923;
+    color: white;
+}
+
+#body-content {
+    height: 100vh;
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+hr {
+    width: 100%;
+    margin: 0;
 }
 
 /* --- ---  */
@@ -35,6 +50,34 @@ body {
 
 .navbar a {
     color: white;
+}
+
+/* --- ---  */
+
+/* --- Home --- */
+
+#home-content {
+    padding: 0px;
+}
+
+#home-greeting {
+    font-size: 5vw;
+}
+
+#home-username {
+    color:  #00a6fb;
+}
+
+.home-card {
+    border: solid white 3px;
+    color: white;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .custom-md-col {
+        width: 60%; /* Adjust this width as needed */   
+    }
 }
 
 /* --- ---  */
