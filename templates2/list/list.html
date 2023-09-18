@@ -5,8 +5,6 @@
 {% block content %}
 
 
-
-
 <div id="list-container">
     <div id="scrollTopButton" class="text-center">
         <span class="material-symbols-outlined">expand_less</span>
@@ -20,10 +18,10 @@
         <div class="col-md-9 px-3 my-auto">
             {% if list.user_id == g.user.user_id%}
             <form action="/list/{{list.list_id}}" method="POST">
-                <div class="title-container-edit">
+                <div id="title-container-edit">
                     <input type="text" name="title" placeholder="Give your list a name!" value="{{list.title}}">
                 </div>
-                <div class="desc-container-edit">
+                <div id="desc-container-edit">
                     <textarea style="overflow:auto" name="description" cols="40" rows="5" placeholder="Write a description for your list here.">{{list.description}}</textarea>
                 </div>
                 <button id="list-detail-button">Update</button>
