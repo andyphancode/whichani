@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, StringField
+from wtforms import StringField, PasswordField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 
 class SignUpForm(FlaskForm):
@@ -24,4 +24,20 @@ class EditUserForm(FlaskForm):
     old_password = PasswordField('Current Password (Required)')
     new_password = PasswordField('New Password', validators=[Length(min=8)])
     new_password_confirm = PasswordField('Confirm New Password', validators=[Length(min=8)])
+
+class ResetRequestForm(FlaskForm):
+    "Request reset form."
+
+    email = StringField('Email', validators=[DataRequired(), Email()])
+
+class ResetPasswordForm(FlaskForm):
+    "Reset password form."
+    new_password = PasswordField('New Password', validators=[Length(min=8)])
+    new_password_confirm = PasswordField('Confirm New Password', validators=[Length(min=8)])
+
+class EditListForm(FlaskForm):
+    "Edit list form."
+    list_title = StringField('List Title', validators=[Length(max=60)])
+    list_description = TextAreaField('List Description', validators=[Length(max=280)])
+    
     
