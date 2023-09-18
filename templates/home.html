@@ -9,9 +9,9 @@
       <div class="col">
         <span id="home-greeting">Welcome 
             {% if not g.user %}
-            to WhichAni!
+            to <span class="home-greeting-name">WhichAni!</span>
             {% else %}
-            back, <span id="home-username">{{ g.user.username}}!</span>
+            back, <span class="home-greeting-name">{{ g.user.username}}!</span>
             {% endif %}
         </span>
       </div>
