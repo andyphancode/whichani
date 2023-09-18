@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Login to WhichAni{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card auth-bg-custom auth-text-custom">
+                <div class="card-header">
+                    <h4 class="card-title">Login</h4>
+                    <small>Sign in to view your lists and likes.</small>
+                </div>
+                <div class="card-body">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+  
+                        {% for field in form if field.widget.input_type != 'hidden' %}
+                            {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <div class="mb-3">
+                                <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
+                                {{ field (class_="form-control", placeholder="Enter your "+field.name+"...") }}                                
+                            </div>
+                        {% endfor %}
+                        <div class="text-start mb-3">
+                            <a href="/reset_password" class="auth-link">Forgot Password?</a>
+                        </div>
+                        <div class="text-start mb-3">
+                            <a href="/signup" class="auth-link">Don't have an account?</a>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn auth-btn-custom">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
