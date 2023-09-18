@@ -1,14 +1,10 @@
 import os
-import requests
-from flask import Flask, request, render_template, redirect, flash, session, jsonify, g
+from flask import Flask, render_template, session, g
 from routes.list import list
 from routes.auth import auth
 from routes.user import user
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy.exc import IntegrityError
-from models import connect_db, db, User, List, Listings, Anime
-from forms import SignUpForm, LoginForm, EditUserForm
-from app import *
+from models import connect_db, db, User
 from secret import API_KEY_CONFIG
 
 CURR_USER_KEY = "curr_user"
@@ -25,7 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
-
+ 
 
 ######################################################
 # Session handler
