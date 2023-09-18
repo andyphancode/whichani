@@ -1,12 +1,25 @@
 from flask import Flask, request, render_template, redirect, flash, session, jsonify, g, Blueprint
 from models import connect_db, db, User, List, Listings, Anime
-from forms import SignUpForm, LoginForm, EditUserForm
+from forms import SignUpForm, LoginForm, EditUserForm, ResetRequestForm, ResetPasswordForm
 from sqlalchemy.exc import IntegrityError
+from app import *
+from secret import WhichAniServicePW, WhichAniEmail
+from flask_mail import Message, Mail
+from flask import url_for
 
 CURR_USER_KEY = "curr_user"
 
 auth = Blueprint('auth', __name__, template_folder='routes')
 
+app = Flask(__name__) 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = WhichAniEmail
+app.config['MAIL_PASSWORD'] = WhichAniServicePW
+
+mail = Mail(app)
+mail.init_app(app)
 
 ######################################################
 # User signup/login/logout function helpers
@@ -42,6 +55,7 @@ def do_logout():
 
 @auth.route('/signup/', methods=["GET", "POST"])
 def signup():
+    "Sign a user up."
 
     form = SignUpForm()
 
@@ -69,6 +83,7 @@ def signup():
         
     else: 
         return render_template('/user/signup.html', form=form)
+
 
 @auth.route('/logout/', methods=["GET"])
 def logout():
@@ -98,3 +113,63 @@ def login():
         flash("Invalid credentials.", 'danger')
 
     return render_template('/user/login.html', form=form)
+
+def send_mail(user):
+    "Helper function for sending email."
+    token=User.get_reset_token(user)
+    print(user.email)
+    msg = Message('WhichAni Password Reset Request', recipients=[user.email], sender='noreply@whichani.com')
+    msg.body = f'''
+
+        Click the link below to reset your WhichAni PW.
+        {url_for('auth.reset_token', token=token, _external=True)}
+        If you didn't make this request. Ignore this message.
+
+    '''
+
+    mail.send(msg)
+    
+
+@auth.route('/reset_password', methods=["GET", "POST"])
+def reset_request():
+    "Render page for sending reset password email"
+
+    form=ResetRequestForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if(user):
+            send_mail(user)
+            flash('Reset request sent! Check your email :)')
+            return redirect("/login")
+    return render_template('/user/reset_request.html', form=form)
+
+@auth.route('/reset_password/<token>', methods=["GET", "POST"])
+def reset_token(token):
+    "Render page for resetting password and handle password reset."
+
+    user = User.verify_token(token)
+
+    if user is None:
+       flash('Invalid or expired token. Please try again.', 'warning')
+       return redirect('/reset_password')
+
+    form=ResetPasswordForm()
+
+    if form.validate_on_submit():
+
+        new_password = form.new_password.data
+        new_password_confirm = form.new_password_confirm.data
+
+        if new_password != new_password_confirm:
+            flash("New passwords do not match!", "danger")
+            return redirect(f'/reset_password/{token}')
+        
+        if new_password != "":
+            success = User.update_password(user.username, new_password)
+            if success:
+                flash("Password successfully changed.","success")
+                return redirect('/login')
+            
+    return render_template('/user/reset_password.html', form=form)
+        
