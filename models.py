@@ -1,5 +1,13 @@
+import os
+from secret import API_KEY_CONFIG
+import jwt
+import json
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+
+
+SECRET_KEY = os.environ.get("SECRET_KEY", API_KEY_CONFIG)
 
 db = SQLAlchemy()
 
@@ -97,6 +105,29 @@ class User(db.Model):
                 return user
 
         return False
+    
+    @classmethod
+    def get_reset_token(cls, self):
+
+        payload = {
+            'user_id': self.user_id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        }
+
+        reset_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+        return reset_token
+    
+    @staticmethod
+    def verify_token(token):
+        try:
+            user_id = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])['user_id']
+        except:
+            return None
+        return User.query.get_or_404(user_id)
+
+
+
     
 
 class Anime(db.Model):
