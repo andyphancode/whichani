@@ -3,6 +3,7 @@ body {
     padding-top: 60px;
     background-color: #051923;
     color: white;
+    /* font-family: "ＭＳ Ｐゴシック"; */
 }
 
 #body-content {
@@ -68,8 +69,9 @@ hr {
     font-size: 5vw;
 }
 
-#home-username {
+.home-greeting-name {
     color:  #00a6fb;
+    text-shadow: 1px 0 0 #fff, 0 -1px 0 #fff, 0 1px 0 #fff, -1px 0 0 #fff;
 }
 
 .home-card {
@@ -83,6 +85,212 @@ hr {
     .custom-md-col {
         width: 60%; /* Adjust this width as needed */   
     }
+}
+
+/* --- ---  */
+
+/* --- Login/Register --- */
+
+.auth-bg-custom {
+    background-color: #0a2b3b;
+}
+
+.auth-text-custom {
+    color: white;
+}
+
+.auth-btn-custom {
+    background-color: #003554;
+    color: white;
+}
+
+.auth-link {
+    color: lightgray;
+
+}
+
+/* --- ---  */
+
+/* --- Recommend Form ---  */
+
+#recommend-button {
+    background-color: #00a6fb;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    height: 3rem;
+}
+
+.recommend-row-a {
+    background-color: #082838;
+    border: solid 1px #003554;
+    color: white;
+}
+
+.recommend-row-b {
+    background-color: transparent;
+    border: solid 1px #003554;
+    color: white;
+}
+
+/* --- ---  */
+
+/* --- Viewing List ---  */
+
+/* Scroll back to top button */
+
+#scrollTopButton {
+    display: none;
+    position: fixed;
+    text-align: center;
+    font-weight: bold;
+    bottom: 15px;
+    right: 30px;
+    z-index: 20;
+}
+
+#scrollTopButton span {
+    font-size: 50px;
+    border-radius: 50px;
+    background: #00a6fb;
+}
+
+
+
+/* Clipboard for link */
+
+#list-clipboard{
+    cursor: pointer;
+    padding: 10px;
+    color: white;
+    background-color: transparent;
+    border: solid 1px #082838;
+    border-radius: 10px;
+}
+
+#list-clipboard:hover{
+    background-color: black;
+    border: solid 1px gray;
+}
+
+#list-url-notif {
+    margin-bottom: 0;
+}
+
+/* Delete list elements */
+
+#delete-list-open {
+    color: rgb(180, 64, 64);
+    text-decoration: underline;
+}
+
+#delete-list-open:hover{
+    color: gray;
+    cursor: pointer;
+}
+
+#delete-list-open span {
+    vertical-align: -5px;
+}
+
+#delete-list-form {
+    position: fixed;
+    margin-top: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    display: none;
+}
+
+#delete-list-close {
+    position: absolute; top: 5px; right: 5px;
+}
+
+
+
+#delete-list-confirm {
+    color: white;
+    background-color: rgb(180, 64, 64);
+}
+
+#delete-list-confirm:hover {
+    background-color: rgb(199, 30, 30);
+}
+
+/* Edit list */
+
+.title-container, #title-container-edit {
+    font-size: 150%;
+}
+
+.desc-container, #desc-container-edit {
+    font-size: 90%;
+}
+
+#list_description, #list_title {
+ background-color: transparent;
+ color: white;
+}
+
+#edit-list-form {
+    position: fixed;
+    margin-top: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    display: none;
+}
+
+.edit-list-open:hover{
+    color: gray;
+    cursor: pointer;
+}
+
+#edit-list-close {
+    position: absolute; top: 5px; right: 5px;
+}
+
+#edit-list-confirm {
+    color: white;
+    border: solid 1px white;
+    background-color: #003554;
+}
+
+#edit-list-confirm:hover {
+    background-color: inherit;
+}
+
+/* Add anime button */
+#add-anime-row a{
+    color: inherit;
+}
+
+#list-add-anime-icon{
+    font-size: 50px;
+    margin-top: 5px;
+}
+
+/* List */
+
+#list-container {
+    overflow: auto;
+    border: solid 1px #082838;
+}
+
+#list-disclaimer {
+    color: gray;
 }
 
 /* --- ---  */
