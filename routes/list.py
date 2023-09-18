@@ -2,6 +2,7 @@ import requests
 import random
 from flask import request, render_template, redirect, g, Blueprint
 from models import db, List, Listings, Anime
+from forms import EditListForm
 
 
 list = Blueprint('list', __name__,template_folder='routes')
@@ -94,12 +95,17 @@ def show_list(list_id):
 
     list = List.query.get_or_404(list_id)
 
+    edit_form = EditListForm()
+    # prepopulate the edit_form textarea
+    edit_form.list_description.data = list.description
+
+
     if request.method == "GET":
-        return render_template("/list/list.html", list=list)
+        return render_template("/list/list.html", list=list, edit_form=edit_form)
     
     if request.method == "POST":
-        list.title = request.form.get('title')
-        list.description = request.form.get('description')
+        list.title = request.form.get('list_title')
+        list.description = request.form.get('list_description')
 
         db.session.add(list)
         db.session.commit()
@@ -113,9 +119,6 @@ def delete_list(list_id):
     if not g.user:
         return redirect(f"/list/{list_id}")
     
-    if request.method == "GET":
-        return render_template("/list/delete.html", list=list)
-
     if request.method == "POST":  
         Listings.query.filter_by(list_id=list_id).delete()
         db.session.delete(list)
@@ -213,9 +216,6 @@ def edit_listing(listing_id):
     if not g.user:
         return redirect(f"/list/{listing.lists.list_id}")
     
-    if request.method == "GET":
-        return render_template("/list/edit_listing.html", listing=listing)
-
     if request.method == "POST":
 
         listing_description = request.form.get('listing-description')
@@ -235,3 +235,14 @@ def delete_listing(listing_id):
     db.session.delete(listing)
     db.session.commit()
     return redirect(f"/list/{listing.lists.list_id}")
+
+@list.route("/list/<int:list_id>/like", methods=["GET","POST"])
+def like_list(list_id):
+
+    list = List.query.get_or_404(list_id)
+    user_id = g.user.user_id
+
+    if not g.user:
+        return redirect(f"/list/{list_id}")
+
+    //
