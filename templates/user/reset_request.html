@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Reset Password Through Email{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card auth-bg-custom auth-text-custom">
+                <div class="card-header">
+                    <h4 class="card-title">Forgot Your Password?</h4>
+                    <small>Send a password reset link to your email.</small>
+                </div>
+                <div class="card-body">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+  
+                        {% for field in form if field.widget.input_type != 'hidden' %}
+                            {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                            <div class="mb-3">
+                                <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
+                                {{ field (class_="form-control", placeholder="Enter your "+field.name+"...") }}                                
+                            </div>
+                        {% endfor %}
+                        <div class="text-start mb-3">
+                            <a href="/login" class="auth-link">Go back</a>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn auth-btn-custom">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
