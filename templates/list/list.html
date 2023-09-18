@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %} {{list.title}} {% endblock %}
+
+{% block content %}
+
+
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div id="list-container">
+                <div id="scrollTopButton" class="text-center">
+                    <span class="material-symbols-outlined">expand_less</span>
+                </div>
+                <div class="row my-3 justify-content-center">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}        
+                </div>
+                <div class="row g-0 my-3 justify-content-center">
+                    <div class="col-md-9 px-3 my-auto">
+                        {% if list.title == "" %}
+                            <div class="title-container">
+                                <span>Untitled</span>
+                                {% if list.user_id == g.user.user_id%}
+                                    <span class="material-icons edit-list-open">edit</span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="title-container">
+                                <span>{{list.title}}</span>
+                                {% if list.user_id == g.user.user_id%}
+                                    <span class="material-icons edit-list-open">edit</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if list.description == "" %}
+                            <div class="desc-container">
+                                <span>No description.</span>
+                                {% if list.user_id == g.user.user_id%}
+                                    <span class="material-icons edit-list-open">edit</span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="desc-container">
+                                <span>{{list.description}}</span>
+                                {% if list.user_id == g.user.user_id%}
+                                    <span class="material-icons edit-list-open">edit</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div>
+                            <small id="list-disclaimer">All images and synopses retrieved from MyAnimeList.</small>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="mb-3">
+                            <p id="list-url-notif">Click to copy this URL!</p>
+                            <input type="text" id="list-clipboard" value="http://127.0.0.1:5000/list/{{list.list_id}}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            List made by <a style="color: white" href="/user/{{list.users.user_id}}">{{list.users.username}}</a>
+                        </div>
+                        <div>
+                            {% if list.user_id == g.user.user_id%}
+                                <p id="delete-list-open">Delete this list <span class="material-symbols-outlined">delete</span></p>
+                            {% endif %}    
+                        </div>
+                    </div>
+                </div>
+                {% if list.user_id == g.user.user_id%}
+                <div class="row g-0 my-3 justify-content-center anime-container">
+                    <div class="col-md-12 text-center" id="add-anime-row">
+                        <a href="/list/{{list.list_id}}/search"><span id="list-add-anime-icon" class="material-symbols-outlined">add_circle</span></a>
+                        <br>
+                        <h1>Add an Anime</h1>
+                    </div>
+                </div>
+                {% endif %}   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="container">
+    <div id="edit-list-form" class="col-md-6">
+        <form action="/list/{{list.list_id}}" method="POST">
+            <h2>Edit List Details</h2>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="edit-list-close"></button>
+            {{ edit_form.hidden_tag() }}
+    
+            {% for field in edit_form if field.widget.input_type != 'hidden' %}
+
+                {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+
+                {% if field.name == 'list_title' %}
+                    <div class="mb-3">
+                        <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
+                        {{ field (class_="form-control", placeholder="Give your list a name!", value=list.title) }}                                
+                    </div>                            
+                {% else %}
+                    <div class="mb-3">
+                        <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
+                        {{ field (class_="form-control", placeholder="Write a description for your list here.", value=list.description) }}                                
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+
+            <button class="btn" id="edit-list-confirm">Update</button>
+        </form>
+    </div>
+</div>
+
+<div id="container">
+    <div id="delete-list-form" class="col-md-4">
+        <form method="POST" action="/list/{{list.list_id}}/delete">
+            <h3>Delete this list?</h3>
+            <div class="mb-3">
+                <small>You cannot undo this.</small>
+            </div>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-list-close"></button>
+            <button class="btn" id="delete-list-confirm">Confirm</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    const temp = $("<input>");
+    const url = $(location).attr('href');
+
+    $('#list-clipboard').on('click', function() {
+        $("body").append(temp);
+        temp.val(url).select();
+        document.execCommand("copy");
+        temp.remove();
+        $("#list-url-notif").text("Copied!")
+    })
+
+    const scrollTopButton = $("#scrollTopButton")
+    $('#list-container').on('scroll', function(){
+        if($('#list-container').scrollTop() > 20){
+            scrollTopButton.css("display","block");
+        }
+        else
+        {
+            scrollTopButton.css("display","none");
+        }
+    })
+
+    scrollTopButton.on('click', function(){
+        $('#list-container').scrollTop(0);
+    })
+
+    $('.edit-list-open').on('click', function () {
+        $('#edit-list-form').toggle();
+    });
+
+    $('#edit-list-close').on('click', function () {
+        $('#edit-list-form').toggle();
+    });
+
+    $('#delete-list-open').on('click', function () {
+        $('#delete-list-form').toggle();
+    });
+
+    $('#delete-list-close').on('click', function () {
+        $('#delete-list-form').toggle();
+    });
+</script>
+
+{% endblock %}
