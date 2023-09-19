@@ -1,7 +1,7 @@
 import requests
 import random
 from flask import request, render_template, redirect, g, Blueprint
-from models import db, List, Listings, Anime
+from models import db, List, Listings, Anime, Likes
 from forms import EditListForm
 
 
@@ -239,10 +239,15 @@ def delete_listing(listing_id):
 @list.route("/list/<int:list_id>/like", methods=["GET","POST"])
 def like_list(list_id):
 
-    list = List.query.get_or_404(list_id)
-    user_id = g.user.user_id
 
     if not g.user:
         return redirect(f"/list/{list_id}")
 
-    //
+    if request.method == "POST":
+
+        list = List.query.get_or_404(list_id)
+        user_id = g.user.user_id
+
+        like = Like
+        return redirect(f"/list/{list_id}")
+    
