@@ -240,7 +240,6 @@ class Likes(db.Model):
 
     list_id = db.Column(
         db.Integer,
-        db.ForeignKey('lists.list_id', ondelete='cascade'),
-        unique=True
+        db.ForeignKey('lists.list_id', ondelete='cascade')
     )
 
