@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect, flash, session, jso
 from models import connect_db, db, User, List, Listings, Anime
 from forms import SignUpForm, LoginForm, EditUserForm, ResetRequestForm, ResetPasswordForm
 from sqlalchemy.exc import IntegrityError
-from app import *
 from secret import WhichAniServicePW, WhichAniEmail
 from flask_mail import Message, Mail
 from flask import url_for
