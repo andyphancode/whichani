@@ -81,12 +81,38 @@ hr {
     vertical-align: middle;
 }
 
+.home-card span {
+    font-size: 30px;
+}
+
 @media (max-width: 768px) {
     .custom-md-col {
         width: 60%; /* Adjust this width as needed */   
     }
 }
 
+.top-list-item {
+    background-color: transparent;
+    color: white;
+}
+
+.top-list-item a {
+    color: white;
+}
+
+.top-list-desc {
+    width: 28ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.top-list-title {
+    width: 28ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 /* --- ---  */
 
 /* --- Login/Register --- */
@@ -225,13 +251,40 @@ hr {
 
 /* Edit list */
 
-.title-container, #title-container-edit {
+.title-container {
     font-size: 150%;
+    word-wrap: break-word;
 }
 
-.desc-container, #desc-container-edit {
+.desc-container {
     font-size: 90%;
+    word-wrap: break-word;
 }
+
+#desc-container-edit {
+    background-color: transparent;
+    color: white;
+}
+
+#desc-container-edit::-webkit-scrollbar {
+    width: 12px;
+}
+
+#desc-container-edit::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#desc-container-edit::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+}
+
+#desc-container-edit::-webkit-scrollbar-thumb:hover {
+    background: lightgray;
+}
+
+#desc-container-edit::-webkit-scrollbar-corner {
+    background-color: transparent;
+} 
 
 #list_description, #list_title {
  background-color: transparent;
@@ -292,5 +345,16 @@ hr {
 #list-disclaimer {
     color: gray;
 }
+
+#list-likes .material-icons {
+    vertical-align: -6px;
+}
+
+#like-button {
+    background-color: transparent;
+    border: none;
+    color: pink;
+}
+
 
 /* --- ---  */
