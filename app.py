@@ -4,8 +4,9 @@ from routes.list import list
 from routes.auth import auth
 from routes.user import user
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, db, User
+from models import connect_db, db, User, List, likes
 from secret import API_KEY_CONFIG
+from sqlalchemy import desc, func
 
 CURR_USER_KEY = "curr_user"
 
@@ -44,9 +45,31 @@ def add_user_to_g():
 
 @app.route('/', methods=["GET"])
 def home():
-    """Render homepage based on login status."""
+    """Render homepage based on login status. Also load top liked lists."""
 
-    return render_template('home.html')
+    list_alias = db.aliased(List)
+    likes_alias = db.aliased(likes)
+
+    top_lists = (db.session.query(list_alias) 
+                .join(likes_alias, list_alias.list_id == likes_alias.c.list_id)
+                .group_by(list_alias.list_id)
+                .order_by(desc(db.func.count(likes_alias.c.user_id)))
+                .limit(10)
+                .all())
+
+    top_list_with_likes = []
+
+    for list in top_lists:
+        tmp = []
+        like_count = db.session.query(func.count(likes.c.user_id)).filter(likes.c.list_id == list.list_id).scalar()
+        first_listing = list.listings
+        tmp.append(list)
+        tmp.append(like_count)
+        tmp.append(first_listing)
+        top_list_with_likes.append(tmp)
+
+
+    return render_template('home.html', top_list_with_likes=top_list_with_likes)
 
 ######################################################
 # Error page
