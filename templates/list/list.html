@@ -21,14 +21,14 @@
                 <div class="row g-0 my-3 justify-content-center">
                     <div class="col-md-9 px-3 my-auto">
                         {% if list.title == "" %}
-                            <div class="title-container">
+                            <div class="col-md-6 title-container mb-3">
                                 <span>Untitled</span>
                                 {% if list.user_id == g.user.user_id%}
                                     <span class="material-icons edit-list-open">edit</span>
                                 {% endif %}
                             </div>
                         {% else %}
-                            <div class="title-container">
+                            <div class="col-md-6 title-container mb-3">
                                 <span>{{list.title}}</span>
                                 {% if list.user_id == g.user.user_id%}
                                     <span class="material-icons edit-list-open">edit</span>
@@ -36,14 +36,14 @@
                             </div>
                         {% endif %}
                         {% if list.description == "" %}
-                            <div class="desc-container">
+                            <div class="col-md-4 desc-container mb-3">
                                 <span>No description.</span>
                                 {% if list.user_id == g.user.user_id%}
                                     <span class="material-icons edit-list-open">edit</span>
                                 {% endif %}
                             </div>
                         {% else %}
-                            <div class="desc-container">
+                            <div class="col-md-4 desc-container mb-3">
                                 <span>{{list.description}}</span>
                                 {% if list.user_id == g.user.user_id%}
                                     <span class="material-icons edit-list-open">edit</span>
@@ -53,9 +53,26 @@
                         <div>
                             <small id="list-disclaimer">All images and synopses retrieved from MyAnimeList.</small>
                         </div>
-
                     </div>
                     <div class="col-md-3 text-center">
+                        <div id="list-likes" class="mb-3"> 
+                            {% if g.user %}
+                            <form method="post" action="/list/{{list.list_id}}/like">
+                                Likes <span class="badge rounded-pill bg-primary mx-2">{{likes_count}}</span>
+                                <button id="like-button">
+                                    <span class="material-icons">
+                                        {% if user_has_liked %}
+                                        favorite
+                                        {% else %}
+                                        favorite_border
+                                        {% endif %}
+                                    </span>                                    
+                                </button>
+                            </form>
+                            {% else %}
+                            Likes <span class="badge rounded-pill bg-primary mx-2">{{likes_count}}</span>
+                            {% endif %}                             
+                        </div>
                         <div class="mb-3">
                             <p id="list-url-notif">Click to copy this URL!</p>
                             <input type="text" id="list-clipboard" value="http://127.0.0.1:5000/list/{{list.list_id}}" readonly>
@@ -78,10 +95,12 @@
                         <h1>Add an Anime</h1>
                     </div>
                 </div>
-                {% endif %}   
+                {% endif %}
+                <div>{{list.listings}}</div>   
             </div>
         </div>
     </div>
+
 </div>
 
 
@@ -106,7 +125,7 @@
                 {% else %}
                     <div class="mb-3">
                         <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
-                        {{ field (class_="form-control", placeholder="Write a description for your list here.", value=list.description) }}                                
+                        {{ field (class_="form-control", placeholder="Write a description for your list here.", value=list.description, id_="desc-container-edit") }}                                
                     </div>
                 {% endif %}
 
