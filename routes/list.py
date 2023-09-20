@@ -1,7 +1,7 @@
 import requests
 import random
-from flask import request, render_template, redirect, g, Blueprint
-from models import db, List, Listings, Anime, Likes
+from flask import request, render_template, redirect, g, Blueprint, flash
+from models import db, List, Listings, Anime, likes, User
 from forms import EditListForm
 
 
@@ -99,9 +99,17 @@ def show_list(list_id):
     # prepopulate the edit_form textarea
     edit_form.list_description.data = list.description
 
+    likes_count = db.session.query(likes).filter_by(list_id=list_id).count()
+
+
+    if g.user:
+        user_has_liked = db.session.query(likes).filter_by(user_id=g.user.user_id, list_id=list_id).first()
+
+    else:
+        user_has_liked = False
 
     if request.method == "GET":
-        return render_template("/list/list.html", list=list, edit_form=edit_form)
+        return render_template("/list/list.html", list=list, edit_form=edit_form, likes_count=likes_count, user_has_liked=user_has_liked)
     
     if request.method == "POST":
         list.title = request.form.get('list_title')
@@ -239,15 +247,20 @@ def delete_listing(listing_id):
 @list.route("/list/<int:list_id>/like", methods=["GET","POST"])
 def like_list(list_id):
 
+    list = List.query.get_or_404(list_id)
 
     if not g.user:
         return redirect(f"/list/{list_id}")
-
+    
     if request.method == "POST":
 
-        list = List.query.get_or_404(list_id)
-        user_id = g.user.user_id
-
-        like = Like
+        if g.user in list.liked_by:
+            list.liked_by.remove(g.user)
+            db.session.commit()
+        else:
+            list.liked_by.append(g.user)
+            db.session.commit()
+        
         return redirect(f"/list/{list_id}")
-    
+
+        
