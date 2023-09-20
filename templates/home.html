@@ -20,14 +20,10 @@
       <div class="col-xs-12 col-sm-3 col-xl-2 custom-md-col mb-3">
         <div class="card home-card border-light" id="home-card-one">
             <img src="static/images/sousuke_card.png" class="card-img" alt="Get Started!">
-            <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
+            <div class="card-body card-img-overlay d-flex flex-column justify-content-between">
                 <h3 class="card-title">Get Started</h3>
-                <hr>
                 <p class="card-text">Generate a list based off your preferences!</p>
-                <hr>
-                <span class="material-symbols-outlined">
-                    science
-                </span>
+                <span class="material-symbols-outlined home-card-icon">science</span>
                 <a href="/recommend" class="stretched-link"></a>
             </div>
         </div>
@@ -36,23 +32,19 @@
         {% if not g.user %}
         <div class="card home-card border-light" id="home-card-two">
             <img src="static/images/mitsumi_card.png" class="card-img" alt="Signup!">
-            <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
+            <div class="card-body card-img-overlay d-flex flex-column justify-content-between">
                 <h3 class="card-title">Sign Up</h3>
-                <hr>
                 <p class="card-text">Sign up to start making your own lists!</p>
-                <hr>
-                <span class="material-symbols-outlined">person_add</span>
+                <span class="material-symbols-outlined home-card-icon">person_add</span>
                 <a href="/signup" class="stretched-link"></a>
             </div>
         </div>
         {% else %}
         <div class="card home-card border-light" id="home-card-two">
             <img src="static/images/mitsumi_card.png" class="card-img" alt="Make a List!">
-            <div class="card-body card-img-overlay d-flex flex-wrap justify-content-center align-items-center">
-                <h3 class="card-title">Create a List</h3>
-                <hr>
+            <div class="card-body card-img-overlay d-flex flex-column justify-content-between">
+                <h3 class="card-title">Create List</h3>
                 <p class="card-text">Start making and sharing your own list today!</p>
-                <hr>
                 <span class="material-symbols-outlined">view_list</span>
                 <a href="/new_list" class="stretched-link"></a>
             </div>
@@ -62,5 +54,31 @@
     </div>
 </div>
 
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <h2 class="mb-3">Top Lists</h2>
+        <ul class="list-group list-group-numbered" id="top-list">
+          {% for list in top_list_with_likes %}
+          <li class="list-group-item d-flex justify-content-center align-items-start top-list-item">
+            <div style="max-width: 100%" class="ms-2 me-auto">
+              <a class="fw-bold" href="/list/{{list[0].list_id}}"><p class="top-list-title">{{ list[0].title }}</p></a>
+              <p class="top-list-desc">
+                  {{list[0].description}}
+              </p>
+              <span class="badge bg-primary rounded-pill">{{ list[1] }} Likes</span>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+              <a href="/list/{{list[0].list_id}}"><img src="{{ list[2][0].anime.anime_image_url }}" alt="{{ list[2][0].anime.anime_title }}" class="img-fluid" width="100"></a>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-3 mt-5 d-flex justify-content-center align-items-center">
+        <a class="twitter-timeline" data-width="280" data-height="600" data-theme="dark" href="https://twitter.com/WhichAni?ref_src=twsrc%5Etfw">Tweets by WhichAni</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
