@@ -157,6 +157,12 @@ class List(db.Model):
                                backref='lists',
                                lazy=True,
                                cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        """Show info on list."""
+
+        l = self
+        return f"<List {l.list_id} {l.title} {l.description} {l.user_id}>"
 
 class Listings(db.Model):
 
@@ -214,6 +220,11 @@ class Anime(db.Model):
                                backref='anime',
                                lazy=True)
     
+    def __repr__(self):
+        """Show info on anime."""
+
+        a = self
+        return f"<Anime {a.anime_id} {a.anime_image_url} {a.anime_description} {a.anime_title}>"
 ## Stretch feature, saved code
 likes = db.Table('likes',
     db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
