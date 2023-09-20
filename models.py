@@ -1,6 +1,5 @@
 import os
 from secret import API_KEY_CONFIG
-import jwt
 import json
 import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -57,11 +56,14 @@ class User(db.Model):
     )
 
     lists = db.relationship('List',
-                            backref='users')
+                            backref='users',
+                            lazy=True,
+                            cascade='all, delete-orphan')
     
     ##Stretch feature
-    likes = db.relationship('List',
-                            secondary = 'likes')
+    liked_lists = db.relationship('List',
+                            secondary = 'likes',
+                            backref='liked_by')
 
     @classmethod
     def signup(cls, username, password, email, profile_image_url):
@@ -127,8 +129,65 @@ class User(db.Model):
         return User.query.get_or_404(user_id)
 
 
+class List(db.Model):
+    """List saving anime+description entries."""
 
+    __tablename__ = "lists"
+
+    list_id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
     
+    title = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    description = db.Column(
+        db.Text
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.user_id')
+    )
+
+    listings = db.relationship('Listings',
+                               backref='lists',
+                               lazy=True,
+                               cascade='all, delete-orphan')
+
+class Listings(db.Model):
+
+    __tablename__ = "listings"
+
+
+
+    listing_id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    anime_id = db.Column(
+        db.Integer,
+        db.ForeignKey('anime.anime_id')
+    )
+
+    list_id = db.Column(
+        db.Integer,
+        db.ForeignKey('lists.list_id')
+    )
+    
+    listing_description = db.Column(
+        db.Text
+    )
+
+    def __repr__(self):
+        """Show info on listing."""
+
+        l = self
+        return f"<Listing {l.listing_id} {l.anime_id} {l.list_id} {l.listing_description}>"
 
 class Anime(db.Model):
     """For saving an anime entry."""
@@ -152,94 +211,12 @@ class Anime(db.Model):
     )
 
     listings = db.relationship('Listings',
-                               backref='anime')
-
-
-
-class List(db.Model):
-    """List saving anime+description entries."""
-
-    __tablename__ = "lists"
-
-    list_id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+                               backref='anime',
+                               lazy=True)
     
-    title = db.Column(
-        db.Text,
-        nullable=False
-    )
-
-    description = db.Column(
-        db.Text
-    )
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.user_id', ondelete='cascade')
-    )
-
-    anime = db.relationship(
-        'Anime',
-        secondary='listings',
-        backref='lists',
-        overlaps="anime,listings"
-    )
-
-    listings = db.relationship('Listings',
-                               backref='lists')
-
-class Listings(db.Model):
-
-    __tablename__ = "listings"
-
-
-
-    listing_id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    anime_id = db.Column(
-        db.Integer,
-        db.ForeignKey('anime.anime_id', ondelete='cascade')
-    )
-
-    list_id = db.Column(
-        db.Integer,
-        db.ForeignKey('lists.list_id', ondelete='cascade')
-    )
-    
-    listing_description = db.Column(
-        db.Text
-    )
-
-    def __repr__(self):
-        """Show info on listing."""
-
-        l = self
-        return f"<Listing {l.listing_id} {l.anime_id} {l.list_id} {l.listing_description}>"
-
-
 ## Stretch feature, saved code
-class Likes(db.Model):
-    """Mapping user likes to lists."""
-
-    __tablename__ = 'likes'
-
-    like_id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.user_id', ondelete='cascade')
-    )
-
-    list_id = db.Column(
-        db.Integer,
-        db.ForeignKey('lists.list_id', ondelete='cascade')
-    )
+likes = db.Table('likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
+    db.Column('list_id', db.Integer, db.ForeignKey('lists.list_id'), primary_key=True)
+)
 
