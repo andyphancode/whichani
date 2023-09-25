@@ -40,4 +40,7 @@ class EditListForm(FlaskForm):
     list_title = StringField('List Title', validators=[Length(max=60)])
     list_description = TextAreaField('List Description', validators=[Length(max=280)])
     
+class EditListingForm(FlaskForm):
+    "Edit listing form."
+    listing_description = TextAreaField('Listing Description', validators=[Length(max=1200)])
     
