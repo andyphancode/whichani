@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card auth-bg-custom auth-text-custom">
+                <div class="card-header">
+                    <h4 class="card-title">Login</h4>
+                    <small>Sign in to view your lists and likes.</small>
+                </div>
+                <div class="card-body">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        {% for field in form if field.widget.input_type != 'hidden' %}
+                            {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        {% endfor %}
+                        <label for="{{form.old_password.name}}">{{ form.old_password.label.text }}</label>
+                        {{form.old_password(class_="form-control", placeholder="Enter your current password...")}}
+                        <label for="{{form.email.name}}">{{ form.email.label.text }}</label>
+                        {{form.email(value="%s" % user.email, class_="form-control", placeholder="Enter your email...")}}
+                        <label for="{{form.profile_image_url.name}}">{{ form.profile_image_url.label.text }}</label>
+                        {{form.profile_image_url(value="%s" % user.profile_image_url, class_="form-control")}}
+                        <label for="{{form.new_password.name}}">{{ form.new_password.label.text }}</label>
+                        {{form.new_password(class_="form-control", placeholder="Enter your new password...")}}
+                        <label for="{{form.new_password_confirm.name}}">{{ form.new_password_confirm.label.text }}</label>
+                        {{form.new_password_confirm(class_="form-control", placeholder="Re-type your new password...")}}
+                        <div class="text-start mb-3">
+                            <a href="/user/{{user.user_id}}" class="auth-link">Go back</a>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn auth-btn-custom">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
