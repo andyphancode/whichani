@@ -61,12 +61,16 @@ def home():
 
     for list in top_lists:
         tmp = []
-        like_count = db.session.query(func.count(likes.c.user_id)).filter(likes.c.list_id == list.list_id).scalar()
-        first_listing = list.listings
-        tmp.append(list)
-        tmp.append(like_count)
-        tmp.append(first_listing)
-        top_list_with_likes.append(tmp)
+        if len(list.listings) != 0:
+            like_count = db.session.query(func.count(likes.c.user_id)).filter(likes.c.list_id == list.list_id).scalar()
+            first_listing = list.listings
+            tmp.append(list)
+            tmp.append(like_count)
+            tmp.append(first_listing)
+            top_list_with_likes.append(tmp)
+
+            
+
 
 
     return render_template('home.html', top_list_with_likes=top_list_with_likes)
