@@ -66,12 +66,11 @@ hr {
 }
 
 #home-greeting {
-    font-size: 5vw;
+    font-size: 3vw;
 }
 
 .home-greeting-name {
     color:  #00a6fb;
-    text-shadow: 1px 0 0 #fff, 0 -1px 0 #fff, 0 1px 0 #fff, -1px 0 0 #fff;
 }
 
 .home-card {
@@ -91,9 +90,18 @@ hr {
     }
 }
 
+#top-list {
+    border-radius: 15px;
+}
+
 .top-list-item {
     background-color: transparent;
     color: white;
+    border-color: #016ba0;
+}
+
+.top-list-item:hover {
+    background-color: #003554;
 }
 
 .top-list-item a {
@@ -112,6 +120,10 @@ hr {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.top-list-img {
+    border-radius: 5px; 
 }
 /* --- ---  */
 
@@ -165,20 +177,26 @@ hr {
 
 /* Scroll back to top button */
 
-#scrollTopButton {
+.scrollTopButton {
     display: none;
     position: fixed;
     text-align: center;
     font-weight: bold;
-    bottom: 15px;
-    right: 30px;
+    bottom: 0%;
+    left: 90%;
+    transform: translate(-50%, -50%);
     z-index: 20;
 }
 
-#scrollTopButton span {
+.scrollTopButton span {
     font-size: 50px;
     border-radius: 50px;
     background: #00a6fb;
+}
+
+.scrollTopButton span:hover {
+    cursor: pointer;
+    background-color: gray;
 }
 
 
@@ -238,14 +256,12 @@ hr {
     position: absolute; top: 5px; right: 5px;
 }
 
-
-
-#delete-list-confirm {
+#delete-confirm {
     color: white;
     background-color: rgb(180, 64, 64);
 }
 
-#delete-list-confirm:hover {
+#delete-confirm:hover {
     background-color: rgb(199, 30, 30);
 }
 
@@ -325,29 +341,141 @@ hr {
     background-color: inherit;
 }
 
-/* Add anime button */
-#add-anime-row a{
-    color: inherit;
+
+/* Edit Listing */
+
+#edit-listing-form, #delete-listing-form {
+    position: fixed;
+    margin-top: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    display: none;
 }
 
-#list-add-anime-icon{
-    font-size: 50px;
-    margin-top: 5px;
+#delete-listing-form {
+    padding-top: 25px
 }
+
+.edit-listing-open {
+    vertical-align: -5px;
+}
+
+#edit-listing-open:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.delete-listing-open {
+    color: rgb(180, 64, 64);
+    vertical-align: -5px;
+}
+
+.delete-listing-open:hover {
+    color: rgb(199, 30, 30);
+    cursor: pointer;
+}
+
+#edit-listing-close, #delete-listing-close {
+    position: absolute; top: 5px; right: 5px;
+}
+
+#edit-listing-confirm {
+    color: white;
+    border: solid 1px white;
+    background-color: #003554;    
+}
+
+#edit-listing-confirm:hover {
+    background-color: inherit;
+}
+
+#edit-listing-textarea {
+    background-color: transparent;
+    color: white;
+}
+
+#edit-listing-textarea::-webkit-scrollbar {
+    width: 12px;
+}
+
+#edit-listing-textarea::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#edit-listing-textarea::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+}
+
+#edit-listing-textarea::-webkit-scrollbar-thumb:hover {
+    background: lightgray;
+}
+
+#edit-listing-textarea::-webkit-scrollbar-corner {
+    background-color: transparent;
+} 
 
 /* List */
 
+#list-img {
+    border-radius: 15px;
+}
+
 #list-container {
     overflow: auto;
-    border: solid 1px #082838;
 }
+
+.listing-container {
+    border: solid 1px #082838;
+    border-radius: 15px;
+}
+
+.listing-container:hover, #add-anime-compartment:hover {
+    background-color: #003554;
+    border-color: white;
+}
+
+#list-top-compartment, #add-anime-compartment {
+    border: solid 2px #082838;
+    border-radius: 15px;
+}
+
+
+#add-anime-link {
+    color: white;
+    text-decoration: none;
+}
+
+#add-anime-icon{
+    font-size: 50px;
+    margin-top: 5px;
+    color: lightskyblue;
+}
+
 
 #list-disclaimer {
     color: gray;
 }
 
+#list-likes {
+    font-size: 24px;
+}
+
+#list-likes .badge {
+    background-color: #082838;
+    color:white;
+    vertical-align: 3px;
+}
+
 #list-likes .material-icons {
-    vertical-align: -6px;
+    vertical-align: -3px;
+    font-size: 30px;
 }
 
 #like-button {
@@ -356,5 +484,221 @@ hr {
     color: pink;
 }
 
+
+/* --- ---  */
+
+/* --- Search ---  */
+
+.search-container {
+    border: solid 1px #082838;
+    border-radius: 15px;
+}
+
+.search-container:hover {
+    border-color: white;
+    background-color: #003554;
+}
+
+#search-img {
+    border-radius: 15px;
+}
+
+#search-bar {
+    width: 80%;
+    height: 30px;
+    margin: 0;
+    border: solid 1px #00a6fb;
+    background-color: transparent;
+    color: white;
+    padding-left: 10px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#search-icon {
+    vertical-align: middle;
+}
+
+#search-button {
+    height: 30px;
+    width: 50px;
+    margin-top: -5px;
+    margin-left: -5px;
+    border: none;
+    border: solid 1px #00a6fb;
+    background-color: transparent;
+    color: white;
+    vertical-align: middle;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+#add-anime-button {
+    clip-path: circle();
+    border: none;
+    background: none;
+    color: inherit;
+    outline: none;
+}
+
+#add-anime-button:hover {
+    background-color: #003554;
+}
+
+#page-forward-icon, #page-back-icon {
+    vertical-align: middle;
+}
+
+#page-forward-button, #page-back-button {
+    border: none;
+    border: solid 1px #00a6fb;
+    background-color: transparent;
+    color: white;
+}
+
+#page-back-button {
+    width: 38px;
+}
+
+#page-back-icon {
+    margin-left: 5px;
+}
+
+#page-jump-input, #page-jump-button {
+    width: 50px;
+    height: 80%;
+    border: none;
+    border: solid 1px #00a6fb;
+    background-color: transparent;
+    color: white;
+    text-align: center;
+}
+
+/* --- ---  */
+
+/* --- Profile ---  */
+
+#profile-image {
+    clip-path: circle();
+    max-width: 75%;
+    height: auto;
+}
+
+.profile-header {
+    background-color: #003554;
+    color: white;
+
+}
+
+.top-list-link {
+    color: white;
+}
+
+#delete-user-open {
+    color: rgb(180, 64, 64);
+}
+
+#edit-user-open {
+    color: white;
+    text-decoration: none;
+}
+
+#delete-user-open:hover, #edit-user-open:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.profile-container {
+    border: solid 1px #003554;
+}
+
+#delete-user-form {
+    position: fixed;
+    margin-top: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    padding-top: 25px;
+    display: none;
+}
+
+#delete-user-close {
+    position: absolute; top: 5px; right: 5px;
+}
+
+#delete-user-confirm {
+    margin-top: 5px;
+    color: white;
+    background-color: rgb(180, 64, 64);
+}
+
+#delete-user-confirm:hover {
+    background-color: rgb(199, 30, 30);
+}
+
+#edit-about-me-form {
+    position: fixed;
+    margin-top: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    background:#072838;
+    z-index: 100;
+    display: none;
+}
+
+#edit-about-me-confirm {
+    color: white;
+    border: solid 1px white;
+    background-color: #003554;
+}
+
+#edit-about-me-close {
+    position: absolute; top: 5px; right: 5px;
+}
+
+#about-me-container-edit {
+    background-color: transparent;
+    color: white;
+}
+
+#about-me-container-edit::-webkit-scrollbar {
+    width: 12px;
+}
+
+#about-me-container-edit::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#about-me-container-edit::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+}
+
+#about-me-container-edit::-webkit-scrollbar-thumb:hover {
+    background: lightgray;
+}
+
+#about-me-container-edit::-webkit-scrollbar-corner {
+    background-color: transparent;
+} 
+
+#edit-about-me-open {
+    vertical-align: -5px;
+}
+
+#edit-about-me-open:hover{
+    color: gray;
+    cursor: pointer;
+}
 
 /* --- ---  */
