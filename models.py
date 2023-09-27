@@ -1,6 +1,6 @@
 import os
 from secret import API_KEY_CONFIG
-import json
+import jwt
 import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -52,7 +52,7 @@ class User(db.Model):
 
     about_me = db.Column(
         db.Text,
-        default="Tell everyone about yourself!"
+        default="I love anime!"
     )
 
     lists = db.relationship('List',
@@ -141,11 +141,12 @@ class List(db.Model):
     
     title = db.Column(
         db.Text,
-        nullable=False
+        default="Untitled"
     )
 
     description = db.Column(
-        db.Text
+        db.Text,
+        default="No description."
     )
 
     user_id = db.Column(
