@@ -4,23 +4,22 @@
 
 {% block content %}
 
-
+<div class="scrollTopButton text-center p-0">
+    <span class="material-symbols-outlined">expand_less</span>
+</div>
 
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div id="list-container">
-                <div id="scrollTopButton" class="text-center">
-                    <span class="material-symbols-outlined">expand_less</span>
-                </div>
-                <div class="row my-3 justify-content-center">
+                <div class="row my-3">
                     {% for category, message in get_flashed_messages(with_categories=True) %}
                     <div class="alert alert-{{ category }}">{{ message }}</div>
                     {% endfor %}        
                 </div>
-                <div class="row g-0 my-3 justify-content-center">
-                    <div class="col-md-9 px-3 my-auto">
-                        {% if list.title == "" %}
+                <div class="row g-0 my-3 py-3 justify-content-center" id="list-top-compartment">
+                    <div class="col-md-9 px-3">
+                        {% if list.title == "" or None %}
                             <div class="col-md-6 title-container mb-3">
                                 <span>Untitled</span>
                                 {% if list.user_id == g.user.user_id%}
@@ -58,7 +57,7 @@
                         <div id="list-likes" class="mb-3"> 
                             {% if g.user %}
                             <form method="post" action="/list/{{list.list_id}}/like">
-                                Likes <span class="badge rounded-pill bg-primary mx-2">{{likes_count}}</span>
+                                Likes <span class="badge rounded-pill mx-2">{{likes_count}}</span>
                                 <button id="like-button">
                                     <span class="material-icons">
                                         {% if user_has_liked %}
@@ -70,7 +69,7 @@
                                 </button>
                             </form>
                             {% else %}
-                            Likes <span class="badge rounded-pill bg-primary mx-2">{{likes_count}}</span>
+                            Likes <span class="badge rounded-pill mx-2">{{likes_count}}</span>
                             {% endif %}                             
                         </div>
                         <div class="mb-3">
@@ -88,15 +87,40 @@
                     </div>
                 </div>
                 {% if list.user_id == g.user.user_id%}
-                <div class="row g-0 my-3 justify-content-center anime-container">
-                    <div class="col-md-12 text-center" id="add-anime-row">
-                        <a href="/list/{{list.list_id}}/search"><span id="list-add-anime-icon" class="material-symbols-outlined">add_circle</span></a>
-                        <br>
-                        <h1>Add an Anime</h1>
-                    </div>
-                </div>
+                <a id="add-anime-link" href="/list/{{list.list_id}}/search">
+                    <div class="row g-0 my-3 py-3" id="add-anime-compartment">
+                        <div class="col-md-12 text-center" >
+                            <span id="add-anime-icon" class="material-symbols-outlined">add_circle</span>
+                            <h1 id="add-anime-heading">Add an Anime</h1>
+                        </div>
+                    </div>                    
+                </a>
+
                 {% endif %}
-                <div>{{list.listings}}</div>   
+                {% for listing in list.listings|sort(attribute='anime.anime_title') %}
+                <div class="row g-0 m-2 py-3 listing-container">
+                    <div class="col-xl-3 text-center">
+                        <img src="{{listing.anime.anime_image_url}}" alt="Cover image for {{listing.anime_title}}" id="list-img"> 
+                    </div>
+                    <div class="col-xl-9 px-3 mt-3 listing-detail-container">
+                        <div class="title-container">
+                            <span>{{listing.anime.anime_title}}</span>
+                        </div>
+                        <div class="desc-container">
+                            <p>
+                                {{listing.listing_description}} 
+                                {% if list.user_id == g.user.user_id%}
+                                    <span data-description="{{listing.listing_description}}" data-listing-id="{{listing.listing_id}}" class="material-icons edit-listing-open">
+                                        edit
+                                    </span>
+                                    <span data-listing-id="{{listing.listing_id}}" class="material-symbols-outlined delete-listing-open">delete</span>
+                                {% endif %}    
+                            </p>
+                        </div>
+                    </div>
+                </div>                   
+                {% endfor %}
+
             </div>
         </div>
     </div>
@@ -104,7 +128,7 @@
 </div>
 
 
-<div id="container">
+<div class="container">
     <div id="edit-list-form" class="col-md-6">
         <form action="/list/{{list.list_id}}" method="POST">
             <h2>Edit List Details</h2>
@@ -136,19 +160,53 @@
     </div>
 </div>
 
-<div id="container">
+<div class="container">
+    <div id="edit-listing-form" class="col-md-6">
+        <form action="/edit_listing/" method="POST">
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="edit-listing-close"></button>
+            <h2>Edit Listing</h2>
+            {{ edit_listing_form.hidden_tag() }}
+    
+            {% for field in edit_listing_form if field.widget.input_type != 'hidden' %}
+
+                {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+
+                <div class="mb-3">
+                    <label for="{{field.name}}" class="form-label">{{ field.label.text }}</label>
+                    {{ field (class_="form-control", id="edit-listing-textarea", rows=10) }}                                
+                </div>                            
+
+            {% endfor %}
+
+            <button class="btn" id="edit-listing-confirm">Update</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
     <div id="delete-list-form" class="col-md-4">
         <form method="POST" action="/list/{{list.list_id}}/delete">
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-list-close"></button>
             <h3>Delete this list?</h3>
             <div class="mb-3">
                 <small>You cannot undo this.</small>
             </div>
-            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-list-close"></button>
             <button class="btn" id="delete-list-confirm">Confirm</button>
         </form>
     </div>
 </div>
 
+<div class="container">
+    <div id="delete-listing-form">
+        <form method="POST" action="/listing/">
+            <h3>Delete this listing?</h3>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-listing-close"></button>
+            <button class="btn" id="delete-confirm">Confirm</button>
+        </form>
+    </div>
+</div>
 
 
 <script>
@@ -163,19 +221,17 @@
         $("#list-url-notif").text("Copied!")
     })
 
-    const scrollTopButton = $("#scrollTopButton")
-    $('#list-container').on('scroll', function(){
-        if($('#list-container').scrollTop() > 20){
+    const scrollTopButton = $(".scrollTopButton")
+    $(document).on('scroll', function(){
+        if($(document).scrollTop() > 20){
             scrollTopButton.css("display","block");
-        }
-        else
-        {
+        } else {
             scrollTopButton.css("display","none");
         }
     })
 
     scrollTopButton.on('click', function(){
-        $('#list-container').scrollTop(0);
+        $(document).scrollTop(0);
     })
 
     $('.edit-list-open').on('click', function () {
@@ -193,6 +249,43 @@
     $('#delete-list-close').on('click', function () {
         $('#delete-list-form').toggle();
     });
+
+    $('.edit-listing-open').on('click', function () {
+        let listingId = $(this).attr('data-listing-id')
+        $('#edit-listing-form form').attr('action',`/edit-listing/${listingId}`)
+        $('#edit-listing-textarea').val($(this).attr('data-description'))
+        $('#edit-listing-form').toggle();
+    });
+
+    $('#edit-listing-close').on('click', function () {
+        $('#edit-listing-form').toggle();
+    });
+
+    $('.delete-listing-open').on('click', function () {
+        let listingId = $(this).attr('data-listing-id')
+        $('#delete-listing-form form').attr('action',`/listing/${listingId}/delete/`)
+        $('#delete-listing-form').toggle()
+    })
+
+    $('#delete-listing-close').on('click', function () {
+        $('#delete-listing-form').toggle()
+    })
+
+    $(document).ready(function() {
+        if ($(window).width() < 1200) {
+            $('.listing-detail-container').addClass('text-center');
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        const scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+    });
+
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+
 </script>
 
 {% endblock %}
