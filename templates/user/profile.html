@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %} {{user.username}}'s Profile {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-9">
+            <div class="row">
+                <div class="col-md-3 text-center" id="profile-left-container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <img src="{{user.profile_image_url}}" alt="Image for {{user.username}}" id="profile-image">                                         
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col text-center">
+                            {% if user.user_id == g.user.user_id %}
+                            <a href="/user/{{user.user_id}}/edit" id="edit-user-open"><p >Edit profile/settings</p></a>
+                            <p id="delete-user-open">Delete Account</p>                 
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 text-center">
+                    <div class="row text-start py-2 px-1 profile-header">
+                        <h3>About {{user.username}}</h2>
+                        
+                    </div>
+                    <div class="row text-start p-3 mb-3 profile-container">
+                        <span>{{user.about_me}}&nbsp;<span class="material-icons" id="edit-about-me-open">edit</span></span>
+                    </div>
+                    <div class="row text-start py-2 px-1 profile-header">
+                        <h3>Top Lists by User</h2>
+                    </div>
+                    <div class="row text-start py-3 px-2 profile-container">
+                        {% for list in top_lists %}
+                        <div class="col-12 my-1">
+                            <a class="top-list-link" href="/list/{{list.list_id}}">
+                                <span>
+                                    {% if list.title == "" %}
+                                    Untitled     
+                                    {% else %}
+                                    {{list.title}}
+                                    {% endif %}
+                                </span>
+                            </a>
+                            <span class="badge rounded-pill">{{like_counts[list.list_id]}} Likes</span>                                
+                        </div>
+                        {% endfor %}
+                        <div class="text-end">
+                            <a href="/user/{{user.user_id}}/lists">
+                                <small>click to see all</small>       
+                            </a>                            
+                        </div>
+                    </div>
+                    {% if g.user.user_id == user.user_id %}
+                    <div class="row text-start mt-3 py-2 px-1 profile-header">
+                        <h3>Liked Lists</h2>
+                    </div>
+                    <div class="row text-start py-3 px-2 profile-container">
+                        {% for list in liked_lists %}
+                        <div class="col-12 my-1">
+                            <a class="top-list-link" href="/list/{{list.list_id}}">
+                                <span>
+                                    {% if list.title == "" %}
+                                    Untitled     
+                                    {% else %}
+                                    {{list.title}}
+                                    {% endif %}
+                                </span>
+                            </a>                    
+                        </div>
+                        {% endfor %}
+                        <div class="text-end">
+                            <a href="/user/{{user.user_id}}/likes">
+                                <small>click to see all</small>       
+                            </a>                            
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div class="container">
+    <div id="delete-user-form">
+        <form method="POST" action="/user/{{user.user_id}}/delete">
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-user-close"></button>
+            <h3>Are you sure you want to delete your account?</h3>
+            <small>Type "Delete my account." to confirm.</small>
+            <br>
+            <input type="text" id="delete-input-confirm">
+            <br>
+            <button disabled class="btn" id="delete-user-confirm">Confirm</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div id="edit-about-me-form" class="col-md-6">
+        <form action="/user/{{user.user_id}}" method="POST">
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" id="edit-about-me-close"></button>
+            <h2>Edit About Me</h2>
+            {{ form.hidden_tag() }}
+
+            {% for field in form if field.widget.input_type != 'hidden' %}
+
+                {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+
+            <div class="mb-3">
+                <label for="{{field.name}}" class="form-label">{{field.label.text}}</label>
+                {{ field (class_="form-control", value=user.about_me, id_="about-me-container-edit", rows=10)}}
+            </div>
+
+            {% endfor %}
+
+            <button class="btn" id="edit-about-me-confirm">Update</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#delete-input-confirm').on('input', function (){
+        if ($('#delete-input-confirm').val() === "Delete my account.") {
+            $('#delete-user-confirm').prop('disabled', false);
+        } else {
+            $('#delete-user-confirm').prop('disabled', true);
+        }
+    });
+
+
+    $('#delete-user-open').on('click', function () {
+        $('#delete-user-form').toggle();
+    });
+
+    $('#delete-user-close').on('click', function () {
+        $('#delete-user-form').toggle();
+    });
+
+    $('#edit-about-me-open').on('click', function () {
+        $('#edit-about-me-form').toggle();
+    });
+
+    $('#edit-about-me-close').on('click', function () {
+        $('#edit-about-me-form').toggle();
+    });
+
+</script>
+
+{% endblock %}
