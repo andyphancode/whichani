@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} {{user.username}}'s Lists {% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-9">
+            <div class="row text-start py-2 px-1 profile-header">
+                {% if list_type == 1 %}
+                <h3>Lists by {{user.username}} ({{lists|length}})</h2>
+                {% else %}
+                <h3>Liked Lists</h2>
+                {% endif %}
+            </div>
+            <div class="row text-start py-3 px-2 profile-container">
+                {% for list in lists %}
+                <div class="col-12 my-1">
+                    <a class="top-list-link" href="/list/{{list.list_id}}">
+                        <span>
+                            {% if list.title == "" %}
+                            Untitled     
+                            {% else %}
+                            {{list.title}}
+                            {% endif %}
+                        </span>
+                    </a>
+                    <span class="badge rounded-pill">{{like_counts[list.list_id]}} Likes</span>                                
+                </div>
+                {% endfor %}
+                <div class="text-end">
+                    <a href="/user/{{user.user_id}}">
+                        <small>go back</small>       
+                    </a>                            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
