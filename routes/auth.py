@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template, redirect, flash, session, jsonify, g, Blueprint
-from models import connect_db, db, User, List, Listings, Anime
-from forms import SignUpForm, LoginForm, EditUserForm, ResetRequestForm, ResetPasswordForm
+from flask import Flask, render_template, redirect, flash, session,  g, Blueprint
+from models import db, User
+from forms import SignUpForm, LoginForm, ResetRequestForm, ResetPasswordForm
 from sqlalchemy.exc import IntegrityError
 from secret import WhichAniServicePW, WhichAniEmail
 from flask_mail import Message, Mail
@@ -59,8 +59,8 @@ def signup():
     form = SignUpForm()
 
     # if already logged in
-    # if g.user:
-    #     return redirect("/")
+    if g.user:
+        return redirect("/")
 
     if form.validate_on_submit():
         try:
@@ -98,8 +98,8 @@ def login():
     form = LoginForm()
 
     # if already logged in
-    # if g.user:
-    #     return redirect("/")
+    if g.user:
+        return redirect("/")
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
@@ -115,8 +115,9 @@ def login():
 
 def send_mail(user):
     "Helper function for sending email."
+
     token=User.get_reset_token(user)
-    print(user.email)
+
     msg = Message('WhichAni Password Reset Request', recipients=[user.email], sender='noreply@whichani.com')
     msg.body = f'''
 
