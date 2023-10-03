@@ -269,16 +269,18 @@ def delete_listing(listing_id):
     # Preserve list_id in variable
     list_id = listing.lists.list_id
 
+
     if not g.user:
         return redirect(f"/list/{listing.lists.list_id}")  
     
-    if g.user.user_id != list_id:
+    if g.user.user_id != listing.lists.user_id:
         return redirect(f"/list/{list_id}")
      
     if request.method == "POST":
         db.session.delete(listing)
         db.session.commit()
         return redirect(f"/list/{list_id}")
+
 
 @list.route("/list/<int:list_id>/like", methods=["GET","POST"])
 def like_list(list_id):
