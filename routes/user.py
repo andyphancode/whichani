@@ -83,6 +83,9 @@ def show_user_likes(user_id):
 
     user = User.query.get_or_404(user_id)
 
+    if not g.user:
+        return redirect(f"/user/{user_id}")
+
     if g.user.user_id != user_id:
         return redirect(f"/user/{user_id}")
 
@@ -109,10 +112,10 @@ def edit_user(user_id):
     form = EditUserForm()
 
     if not g.user:
-        return redirect(f"/user/{user_id}")
+        return redirect(f"/user/{user_id}", code=302)
     
     if g.user.user_id != user_id:
-        return redirect(f"/user/{user_id}")
+        return redirect(f"/user/{user_id}", code=302)
 
     if request.method == "POST":
 
@@ -151,7 +154,7 @@ def edit_user(user_id):
             flash("Incorrect credentials.", "danger")
         
 
-        return redirect(f"/user/{user_id}/edit")
+        return redirect(f"/user/{user_id}/edit", code=302)
        
     return render_template("/user/edit_profile.html", form=form, user=user)    
 
