@@ -1,6 +1,6 @@
 import requests
 import random
-from flask import request, render_template, redirect, g, Blueprint
+from flask import request, render_template, redirect, g, Blueprint, url_for
 from models import db, List, Listings, Anime, likes
 from forms import EditListForm, EditListingForm
 
@@ -17,7 +17,7 @@ def new_list():
     """Create an empty new list."""
 
     if not g.user:
-        return redirect("/") 
+        return redirect(url_for('home')) 
 
     list = List(
             title="",
@@ -27,7 +27,7 @@ def new_list():
     db.session.add(list)
     db.session.commit()
 
-    return redirect(f"/list/{list.list_id}")
+    return redirect(url_for('list.show_list', list_id=list.list_id))
 
 
 @list.route("/recommend/", methods=["GET", "POST"])
@@ -95,7 +95,7 @@ def recommend():
                 db.session.add(listing)
                 db.session.commit()
 
-        return redirect(f"/list/{list.list_id}")
+        return redirect(url_for('list.show_list', list_id=list.list_id))
 
 @list.route("/list/<int:list_id>/", methods=["GET", "POST"])
 def show_list(list_id):
@@ -124,14 +124,14 @@ def show_list(list_id):
     if request.method == "POST":
 
         if g.user.user_id != list.user_id:
-            return redirect(f"/list/{list_id}")
+            return redirect(url_for('list.show_list', list_id=list_id))
 
         list.title = request.form.get('list_title')
         list.description = request.form.get('list_description')
 
         db.session.add(list)
         db.session.commit()
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
 
 @list.route("/list/<int:list_id>/delete/", methods=["GET", "POST"])
 def delete_list(list_id):
@@ -140,10 +140,10 @@ def delete_list(list_id):
     list = List.query.get_or_404(list_id)
 
     if not g.user:
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
 
     if g.user.user_id != list.user_id:
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
 
     
     if request.method == "POST":  
@@ -151,7 +151,7 @@ def delete_list(list_id):
         Listings.query.filter_by(list_id=list_id).delete()
         db.session.delete(list)
         db.session.commit()
-        return redirect(f"/user/{list.user_id}")
+        return redirect(url_for('user.show_user', user_id=list.user_id))
         
 @list.route("/list/<int:list_id>/search/", methods=["GET","POST"])
 def search(list_id):
@@ -160,7 +160,7 @@ def search(list_id):
     list = List.query.get_or_404(list_id)
 
     if not g.user:
-        return redirect(f"/list/{list_id}") 
+        return redirect(url_for('list.show_list', list_id=list_id)) 
     
     # preserve search_input through page swaps
     search_input = request.args.get('search_input')
@@ -194,10 +194,10 @@ def add_to_list(list_id):
     list = List.query.get_or_404(list_id)
 
     if g.user.user_id != list.user_id:
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
 
     if not g.user:
-        return redirect(f"/list/{list_id}") 
+        return redirect(url_for('list.show_list', list_id=list_id)) 
     
     mal_id = request.form.get('mal_id')
 
@@ -238,20 +238,20 @@ def add_to_list(list_id):
         db.session.add(listing)
         db.session.commit()
 
-    return redirect(f"/list/{list_id}")
+    return redirect(url_for('list.show_list', list_id=list_id))
 
 
-@list.route("/edit-listing/<int:listing_id>", methods=["GET","POST"])
+@list.route("/edit-listing/<int:listing_id>/", methods=["GET","POST"])
 def edit_listing(listing_id):
     """Edit a listing."""
 
     listing = Listings.query.get_or_404(listing_id)
 
     if not g.user:
-        return redirect(f"/list/{listing.lists.list_id}")
+        return redirect(url_for('list.show_list', list_id=listing.lists.list_id))
     
     if g.user.user_id != listing.lists.user_id:
-        return redirect("/")
+        return redirect(url_for('home'))
     
     if request.method == "POST":
 
@@ -259,7 +259,7 @@ def edit_listing(listing_id):
         listing.listing_description = listing_description
         db.session.add(listing)
         db.session.commit()
-        return redirect(f"/list/{listing.lists.list_id}")
+        return redirect(url_for('list.show_list', list_id=listing.lists.list_id))
     
 @list.route("/listing/<int:listing_id>/delete/", methods=["GET","POST"])
 def delete_listing(listing_id):
@@ -271,15 +271,15 @@ def delete_listing(listing_id):
 
 
     if not g.user:
-        return redirect(f"/list/{listing.lists.list_id}")  
+        return redirect(url_for('list.show_list', list_id=list_id))  
     
     if g.user.user_id != listing.lists.user_id:
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
      
     if request.method == "POST":
         db.session.delete(listing)
         db.session.commit()
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list_id))
 
 
 @list.route("/list/<int:list_id>/like", methods=["GET","POST"])
@@ -289,7 +289,7 @@ def like_list(list_id):
     list = List.query.get_or_404(list_id)
 
     if not g.user:
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list.list_id))
     
     if request.method == "POST":
 
@@ -300,6 +300,6 @@ def like_list(list_id):
             list.liked_by.append(g.user)
             db.session.commit()
         
-        return redirect(f"/list/{list_id}")
+        return redirect(url_for('list.show_list', list_id=list.list_id))
 
         
