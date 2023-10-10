@@ -1,6 +1,6 @@
 """List View tests."""
 
-# Run test with:K
+# Run test with:
 # FLASK_ENV=production python -m unittest test_list_views.py
 
 
@@ -133,7 +133,7 @@ class ListViewTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user2.user_id
 
-            resp = c.post(f"/edit-listing/1000", data={'listing_description': 'new changed description'}, follow_redirects = True)
+            resp = c.post(f"/edit-listing/1000/", data={'listing_description': 'new changed description'}, follow_redirects = True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("new changed description", str(resp.data))
     
@@ -142,7 +142,7 @@ class ListViewTestCase(TestCase):
 
         with self.client as c:
 
-            resp = c.post(f"/edit-listing/1000", data={'listing_description': 'new changed description'}, follow_redirects = True)
+            resp = c.post(f"/edit-listing/1000/", data={'listing_description': 'new changed description'}, follow_redirects = True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("this is a test description", str(resp.data))
 
