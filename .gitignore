@@ -1,4 +1,6 @@
 venv/
+myven/
 __pycache__/
 out/
 secret.py
+seed.py
