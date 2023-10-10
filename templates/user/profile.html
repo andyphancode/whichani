@@ -88,7 +88,7 @@
 
 <div class="container">
     <div id="delete-user-form">
-        <form method="POST" action="/user/{{user.user_id}}/delete">
+        <form method="POST" action="/user/{{user.user_id}}/delete/">
             <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-user-close"></button>
             <h3>Are you sure you want to delete your account?</h3>
             <small>Type "Delete my account." to confirm.</small>
@@ -102,7 +102,7 @@
 
 <div class="container">
     <div id="edit-about-me-form" class="col-md-6">
-        <form action="/user/{{user.user_id}}" method="POST">
+        <form action="/user/{{user.user_id}}/" method="POST">
             <button type="button" class="btn-close btn-close-white" aria-label="Close" id="edit-about-me-close"></button>
             <h2>Edit About Me</h2>
             {{ form.hidden_tag() }}
