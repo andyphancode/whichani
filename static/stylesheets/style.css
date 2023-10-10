@@ -256,7 +256,7 @@ hr {
     position: absolute; top: 5px; right: 5px;
 }
 
-#delete-confirm {
+#delete-confirm, #delete-list-confirm {
     color: white;
     background-color: rgb(180, 64, 64);
 }
