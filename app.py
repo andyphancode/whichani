@@ -69,10 +69,6 @@ def home():
             tmp.append(first_listing)
             top_list_with_likes.append(tmp)
 
-            
-
-
-
     return render_template('home.html', top_list_with_likes=top_list_with_likes)
 
 ######################################################
