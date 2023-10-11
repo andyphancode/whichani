@@ -60,7 +60,7 @@ def signup():
 
     # if already logged in
     if g.user:
-        return redirect("/")
+        return redirect(url_for('home'))
 
     if form.validate_on_submit():
         try:
@@ -78,7 +78,7 @@ def signup():
         
         do_login(user)
 
-        return redirect("/")
+        return redirect(url_for('home'))
         
     else: 
         return render_template('/user/signup.html', form=form)
@@ -89,7 +89,7 @@ def logout():
     """Logout a user."""
 
     do_logout()
-    return redirect("/")
+    return redirect(url_for('home'))
 
 @auth.route('/login/', methods=["GET", "POST"])
 def login():
@@ -99,7 +99,7 @@ def login():
 
     # if already logged in
     if g.user:
-        return redirect("/")
+        return redirect(url_for('home'))
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data,
@@ -107,7 +107,7 @@ def login():
         
         if user:
             do_login(user)
-            return redirect("/")
+            return redirect(url_for('home'))
         
         flash("Invalid credentials.", 'danger')
 
@@ -140,8 +140,9 @@ def reset_request():
         user = User.query.filter_by(email=form.email.data).first()
         if(user):
             send_mail(user)
-            flash('Reset request sent! Check your email :)')
-            return redirect("/login")
+            flash('Reset request sent! Check your email :) (and spam folder)')
+            return redirect(url_for('auth.login'))
+        
     return render_template('/user/reset_request.html', form=form)
 
 @auth.route('/reset_password/<token>', methods=["GET", "POST"])
@@ -152,7 +153,7 @@ def reset_token(token):
 
     if user is None:
        flash('Invalid or expired token. Please try again.', 'warning')
-       return redirect('/reset_password')
+       return redirect(url_for('auth.reset_request'))
 
     form=ResetPasswordForm()
 
@@ -163,13 +164,13 @@ def reset_token(token):
 
         if new_password != new_password_confirm:
             flash("New passwords do not match!", "danger")
-            return redirect(f'/reset_password/{token}')
+            return redirect(url_for('auth.reset_token', token=token))
         
         if new_password != "":
             success = User.update_password(user.username, new_password)
             if success:
                 flash("Password successfully changed.","success")
-                return redirect('/login')
+                return redirect(url_for('auth.login'))
             
     return render_template('/user/reset_password.html', form=form)
         

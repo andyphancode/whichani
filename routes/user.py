@@ -1,4 +1,4 @@
-from flask import request, render_template, redirect, flash, g, Blueprint
+from flask import request, render_template, redirect, flash, g, Blueprint, url_for
 from models import db, User, List, likes
 from forms import EditUserForm, EditAboutMeForm
 from sqlalchemy.exc import IntegrityError
@@ -84,10 +84,10 @@ def show_user_likes(user_id):
     user = User.query.get_or_404(user_id)
 
     if not g.user:
-        return redirect(f"/user/{user_id}")
+        return redirect(url_for('user.show_user', user_id=user_id))
 
     if g.user.user_id != user_id:
-        return redirect(f"/user/{user_id}")
+        return redirect(url_for('user.show_user', user_id=user_id))
 
     lists = (List.query
             .join(likes)  # Join with the likes association table
@@ -112,10 +112,10 @@ def edit_user(user_id):
     form = EditUserForm()
 
     if not g.user:
-        return redirect(f"/user/{user_id}", code=302)
+        return redirect(url_for('user.show_user', user_id=user_id))
     
     if g.user.user_id != user_id:
-        return redirect(f"/user/{user_id}", code=302)
+        return redirect(url_for('user.show_user', user_id=user_id))
 
     if request.method == "POST":
 
@@ -130,7 +130,7 @@ def edit_user(user_id):
 
         if new_password != new_password_confirm:
             flash("New passwords do not match!", "danger")
-            return redirect(f"/user/{user_id}/edit")
+            return redirect(url_for('user.edit_user', user_id=user_id))
         
         user_edit = User.authenticate(g.user.username, old_password)
 
@@ -148,27 +148,27 @@ def edit_user(user_id):
                         flash("Password successfully changed.","success")
             except IntegrityError:
                 flash("Email already in use!", "danger")
-                return redirect(f"/user/{user_id}/edit") 
+                return redirect(url_for('user.edit_user', user_id=user_id)) 
 
         else: 
             flash("Incorrect credentials.", "danger")
         
 
-        return redirect(f"/user/{user_id}/edit", code=302)
+        return redirect(url_for('user.edit_user', user_id=user_id))
        
     return render_template("/user/edit_profile.html", form=form, user=user)    
 
-@user.route("/user/<int:user_id>/delete", methods=["POST"])
+@user.route("/user/<int:user_id>/delete/", methods=["POST"])
 def delete_user(user_id):
     """Delete user."""
 
     user = User.query.get_or_404(user_id)
 
     if g.user.user_id != user_id:
-        return redirect(f"/user/{user_id}")
+        return redirect(url_for('user.show_user', user_id=user_id))
 
     if not g.user:
-        return redirect(f"/user/{user_id}")
+        return redirect(url_for('user.show_user', user_id=user_id))
     
     db.session.delete(user)
     db.session.commit()
