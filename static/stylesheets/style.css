@@ -587,10 +587,15 @@ hr {
 .profile-header {
     background-color: #003554;
     color: white;
-
 }
 
 .top-list-link {
+    color: white;
+}
+
+#delete-input-confirm {
+    border-radius: 2px;
+    background-color: transparent;
     color: white;
 }
 
