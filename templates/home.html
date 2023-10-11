@@ -24,7 +24,7 @@
                 <h3 class="card-title">Get Started</h3>
                 <p class="card-text">Generate a list based off your preferences!</p>
                 <span class="material-symbols-outlined home-card-icon">science</span>
-                <a href="/recommend" class="stretched-link"></a>
+                <a href="{{url_for('list.recommend')}}" class="stretched-link"></a>
             </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
                 <h3 class="card-title">Sign Up</h3>
                 <p class="card-text">Sign up to start making your own lists!</p>
                 <span class="material-symbols-outlined home-card-icon">person_add</span>
-                <a href="/signup" class="stretched-link"></a>
+                <a href="{{url_for('auth.signup')}}" class="stretched-link"></a>
             </div>
         </div>
         {% else %}
@@ -46,7 +46,7 @@
                 <h3 class="card-title">Create List</h3>
                 <p class="card-text">Start making and sharing your own list today!</p>
                 <span class="material-symbols-outlined">view_list</span>
-                <a href="/new_list" class="stretched-link"></a>
+                <a href="{{url_for('list.new_list')}}" class="stretched-link"></a>
             </div>
         </div>
         {% endif %}
@@ -62,14 +62,14 @@
           {% for list in top_list_with_likes %}
           <li class="list-group-item d-flex justify-content-center align-items-start top-list-item py-3">
             <div style="max-width: 100%" class="ms-2 me-auto">
-              <a href="/list/{{list[0].list_id}}"><p class="fw-bold top-list-title">{{ list[0].title }}</p></a>
+              <a href="{{url_for('list.show_list', list_id=list[0].list_id)}}"><p class="fw-bold top-list-title">{{ list[0].title }}</p></a>
               <p class="top-list-desc">
                   {{list[0].description}}
               </p>
               <span class="badge bg-primary rounded-pill">{{ list[1] }} Likes</span>
             </div>
             <div class="d-flex justify-content-center align-items-center">
-              <a href="/list/{{list[0].list_id}}"><img src="{{ list[2][0].anime.anime_image_url }}" alt="{{ list[2][0].anime.anime_title }}" class="img-fluid top-list-img" width="100"></a>
+              <a href="{{url_for('list.show_list', list_id=list[0].list_id)}}"><img src="{{ list[2][0].anime.anime_image_url }}" alt="{{ list[2][0].anime.anime_title }}" class="img-fluid top-list-img" width="100"></a>
             </div>
           </li>
           {% endfor %}

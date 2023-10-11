@@ -13,7 +13,7 @@
         <div class="col-md-9">
             <div class="row g-0 my-3 justify-content-center">
                 <div class="col-md-12 text-center">
-                    <form action="/list/{{list.list_id}}/search" method="GET">
+                    <form action="{{url_for('list.search', list_id=list.list_id)}}" method="GET">
                         <input type="hidden" name="page" value="1">
                         <input id="search-bar" name="search_input" type="text" placeholder="Search..">
                         <button formmethod="get" id="search-button"><span id="search-icon" class="material-symbols-outlined">search</span></button>                
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-1 my-auto text-center column-right">
-                                <form action="/list/{{list.list_id}}/add" method="POST">
+                                <form action="{{url_for('list.add_to_list', list_id=list.list_id)}}" method="POST">
                                     <input type="hidden" name="mal_id" value="{{anime['mal_id']}}">
                                     <button id="add-anime-button"><span id="add-anime-icon" class="material-symbols-outlined">add_circle</span></button> 
                                 </form>
@@ -50,21 +50,21 @@
             {% endif %}
             <div class="row g-0 my-3 justify-content-center">
                 <div class="col-md-4 text-end">
-                    <form action="/list/{{list.list_id}}/search" method="GET">
+                    <form action="{{url_for('list.search', list_id=list.list_id)}}" method="GET">
                         <input type="hidden" name="search_input" value="{{search_input}}">
                         <input type="hidden" name="page" value="{{page-1}}">
                         <button id="page-back-button"><span id="page-back-icon" class="material-symbols-outlined">arrow_back_ios</span></button>
                     </form>
                 </div>
                 <div class="col-md-4 my-auto text-center">
-                    <form action="/list/{{list.list_id}}/search" method="GET">
+                    <form action="{{url_for('list.search', list_id=list.list_id)}}" method="GET">
                         <input type="hidden" name="search_input" value="{{search_input}}">
                         Jump to page: <input id="page-jump-input" name="page" type="number" value="{{page}}"> of {% if search_input != None %}{{max_pages}}{% endif %}
                         <button id="page-jump-button">Go!</button>
                     </form>
                 </div>
                 <div class="col-md-4 text-start">
-                    <form action="/list/{{list.list_id}}/search" method="GET">
+                    <form action="{{url_for('list.search', list_id=list.list_id)}}" method="GET">
                         <input type="hidden" name="search_input" value="{{search_input}}">
                         <input type="hidden" name="page" value="{{page+1}}">
                         <button id="page-forward-button"><span id="page-forward-icon" class="material-symbols-outlined">arrow_forward_ios</span></button>

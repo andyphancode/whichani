@@ -29,10 +29,10 @@
                             </div>
                         {% endfor %}
                         <div class="text-start mb-3">
-                            <a href="/reset_password" class="auth-link">Forgot Password?</a>
+                            <a href="{{url_for('auth.reset_request')}}" class="auth-link">Forgot Password?</a>
                         </div>
                         <div class="text-start mb-3">
-                            <a href="/signup" class="auth-link">Don't have an account?</a>
+                            <a href="{{url_for('auth.signup')}}" class="auth-link">Don't have an account?</a>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn auth-btn-custom">Sign In</button>

@@ -17,7 +17,7 @@
                     <div class="row my-3">
                         <div class="col text-center">
                             {% if user.user_id == g.user.user_id %}
-                            <a href="/user/{{user.user_id}}/edit" id="edit-user-open"><p >Edit profile/settings</p></a>
+                            <a href="{{url_for('user.edit_user', user_id=user.user_id)}}" id="edit-user-open"><p >Edit profile/settings</p></a>
                             <p id="delete-user-open">Delete Account</p>                 
                             {% endif %}
                         </div>
@@ -26,7 +26,6 @@
                 <div class="col-md-9 text-center">
                     <div class="row text-start py-2 px-1 profile-header">
                         <h3>About {{user.username}}</h2>
-                        
                     </div>
                     <div class="row text-start p-3 mb-3 profile-container">
                         <span>{{user.about_me}}&nbsp;<span class="material-icons" id="edit-about-me-open">edit</span></span>
@@ -37,7 +36,7 @@
                     <div class="row text-start py-3 px-2 profile-container">
                         {% for list in top_lists %}
                         <div class="col-12 my-1">
-                            <a class="top-list-link" href="/list/{{list.list_id}}">
+                            <a class="top-list-link" href="{{url_for('list.show_list', list_id=list.list_id)}}">
                                 <span>
                                     {% if list.title == "" %}
                                     Untitled     
@@ -50,7 +49,7 @@
                         </div>
                         {% endfor %}
                         <div class="text-end">
-                            <a href="/user/{{user.user_id}}/lists">
+                            <a href="{{url_for('user.show_user_lists', user_id=user.user_id)}}">
                                 <small>click to see all</small>       
                             </a>                            
                         </div>
@@ -62,7 +61,7 @@
                     <div class="row text-start py-3 px-2 profile-container">
                         {% for list in liked_lists %}
                         <div class="col-12 my-1">
-                            <a class="top-list-link" href="/list/{{list.list_id}}">
+                            <a class="top-list-link" href="{{url_for('list.show_list', list_id=list.list_id)}}">
                                 <span>
                                     {% if list.title == "" %}
                                     Untitled     
@@ -74,7 +73,7 @@
                         </div>
                         {% endfor %}
                         <div class="text-end">
-                            <a href="/user/{{user.user_id}}/likes">
+                            <a href="{{url_for('user.show_user_likes', user_id=user.user_id)}}">
                                 <small>click to see all</small>       
                             </a>                            
                         </div>
@@ -88,7 +87,7 @@
 
 <div class="container">
     <div id="delete-user-form">
-        <form method="POST" action="/user/{{user.user_id}}/delete/">
+        <form method="POST" action="{{url_for('user.delete_user', user_id=user.user_id)}}">
             <button type="button" class="btn-close btn-close-white" aria-label="Close" id="delete-user-close"></button>
             <h3>Are you sure you want to delete your account?</h3>
             <small>Type "Delete my account." to confirm.</small>
@@ -102,7 +101,7 @@
 
 <div class="container">
     <div id="edit-about-me-form" class="col-md-6">
-        <form action="/user/{{user.user_id}}/" method="POST">
+        <form action="{{url_for('user.show_user', user_id=user.user_id)}}" method="POST">
             <button type="button" class="btn-close btn-close-white" aria-label="Close" id="edit-about-me-close"></button>
             <h2>Edit About Me</h2>
             {{ form.hidden_tag() }}
@@ -115,7 +114,7 @@
 
             <div class="mb-3">
                 <label for="{{field.name}}" class="form-label">{{field.label.text}}</label>
-                {{ field (class_="form-control", value=user.about_me, id_="about-me-container-edit", rows=10)}}
+                {{ field (class_="form-control", value=user.about_me, id="about-me-container-edit", rows=10)}}
             </div>
 
             {% endfor %}

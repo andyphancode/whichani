@@ -24,24 +24,24 @@
             <ul class="navbar-nav ms-auto align-items-center">
                 {% if not g.user %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/signup">Register</a>
+                    <a class="nav-link" href="{{url_for('auth.signup')}}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="{{url_for('auth.login')}}">Login</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" id="nav-profile-image-link" href="/user/{{ g.user.user_id }}">
+                    <a class="nav-link" id="nav-profile-image-link" href="{{url_for('user.show_user', user_id=g.user.user_id)}}">
                         <img id="nav-profile-image" src="{{ g.user.profile_image_url }}" alt="{{ g.user.username }}">
                     </a>
                 </li>            
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/{{ g.user.user_id }}">
+                    <a class="nav-link" href="{{url_for('user.show_user', user_id=g.user.user_id)}}">
                         <span>{{ g.user.username }}</span>
                     </a>
                 </li>       
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out <img id="logout-icon" src="/static/images/logout_icon.png" alt="logout"></a>
+                    <a class="nav-link" href="{{url_for('auth.logout')}}">Log Out <img id="logout-icon" src="/static/images/logout_icon.png" alt="logout"></a>
                 </li>
                 {% endif %}
             </ul>

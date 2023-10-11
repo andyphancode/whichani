@@ -34,7 +34,7 @@
                         <label for="{{form.new_password_confirm.name}}">{{ form.new_password_confirm.label.text }}</label>
                         {{form.new_password_confirm(class_="form-control", placeholder="Re-type your new password...")}}
                         <div class="text-start mb-3">
-                            <a href="/user/{{user.user_id}}" class="auth-link">Go back</a>
+                            <a href="{{url_for('user.show_user', user_id=user.user_id)}}" class="auth-link">Go back</a>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn auth-btn-custom">Save</button>

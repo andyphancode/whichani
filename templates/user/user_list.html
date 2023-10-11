@@ -18,7 +18,7 @@
             <div class="row text-start py-3 px-2 profile-container">
                 {% for list in lists %}
                 <div class="col-12 my-1">
-                    <a class="top-list-link" href="/list/{{list.list_id}}">
+                    <a class="top-list-link" href="{{url_for('list.show_list', list_id=list.list_id)}}">
                         <span>
                             {% if list.title == "" %}
                             Untitled     
@@ -31,7 +31,7 @@
                 </div>
                 {% endfor %}
                 <div class="text-end">
-                    <a href="/user/{{user.user_id}}">
+                    <a href="{{url_for('user.show_user', user_id=user.user_id)}}">
                         <small>go back</small>       
                     </a>                            
                 </div>

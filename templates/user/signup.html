@@ -33,7 +33,7 @@
                             </div>
                         {% endfor %}
                         <div class="text-start mb-3">
-                            <a href="/login" class="auth-link">Already have an account?</a>
+                            <a href="{{url_for('auth.login')}}" class="auth-link">Already have an account?</a>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn auth-btn-custom">Sign Up</button>
