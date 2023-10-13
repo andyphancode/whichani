@@ -4,7 +4,7 @@ WhichAni
 
 # URL: 
 
-TBD
+whichani.me
 
 # Current Features:
 
@@ -35,7 +35,7 @@ Lists can be deleted entirely if a user no longer wishes to keep their own creat
 
 # Standard User Flow
 
-![image](static/images/userflow.png)
+Standard user flow of the site should involve landing at the home page as either an anonymous user or logged in user. An anonymous user can choose to register or login to access full site features, and a logged in user has access to all features provided. The home page allows a user to access their profile, generate some recommendations, visit top lists, or create their own list. On their profile, they should be able to access their top and liked lists and edit their about me as well as adjust their account settings. List pages are viewable by anyone but if the person owns the list then they are able to add anime as well as edit the listings. The recommendation page allows for a user to select preferences and then generate a list of random anime. 
 
 # API 
 
@@ -48,11 +48,13 @@ https://docs.api.jikan.moe/
 Flask
 bcrypt and Flask bcrypt
 SQLAlchemy and Flask SQLAlchemy
+Flask Mail
 WTForms and Flask WTForms
 gunicorn
 Jinja2
 psycopg2-binary
 requests
+PyJWT
 
 
 # Other
