@@ -1,12 +1,12 @@
 import os
-from secret import API_KEY_CONFIG
+# from secret import API_KEY_CONFIG
 import jwt
 import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
-
-SECRET_KEY = os.environ.get("SECRET_KEY", API_KEY_CONFIG)
+# for production, API_KEY_CONFIG as 2nd argument
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 db = SQLAlchemy()
 

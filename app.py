@@ -17,7 +17,8 @@ app.register_blueprint(list)
 app.register_blueprint(auth)
 app.register_blueprint(user)
 app.app_context().push() 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', API_KEY_CONFIG)
+# for production, API_KEY_CONFIG as 2nd argument
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # debug = DebugToolbarExtension(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///whichani')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
