@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, List, likes
 try:
   from secret import API_KEY_CONFIG
-except ImportError:
+except ModuleNotFoundError:
   pass
 from sqlalchemy import desc, func
 
