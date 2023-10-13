@@ -608,6 +608,11 @@ hr {
     text-decoration: none;
 }
 
+.edit-profile-user {
+    background-color: transparent;
+    color: white;
+}
+
 #delete-user-open:hover, #edit-user-open:hover {
     cursor: pointer;
     text-decoration: underline;
