@@ -5,10 +5,9 @@ from routes.auth import auth
 from routes.user import user
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, List, likes
-try:
-  from secret import API_KEY_CONFIG
-except ModuleNotFoundError:
-  pass
+
+# from secret import API_KEY_CONFIG
+
 from sqlalchemy import desc, func
 
 CURR_USER_KEY = "curr_user"
