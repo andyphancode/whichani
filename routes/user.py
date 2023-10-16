@@ -46,6 +46,10 @@ def show_user(user_id):
 
     # if built in about me form is submitted
     if request.method == "POST":
+
+        if g.user.user_id != user_id:
+            return redirect(url_for('user.show_user', user_id=user_id))
+
         about_me = request.form.get('about_me')
         user.about_me = about_me
         db.session.add(user)

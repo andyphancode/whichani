@@ -28,7 +28,11 @@
                         <h3>About {{user.username}}</h2>
                     </div>
                     <div class="row text-start p-3 mb-3 profile-container">
-                        <span>{{user.about_me}}&nbsp;<span class="material-icons" id="edit-about-me-open">edit</span></span>
+                        <span>{{user.about_me}}&nbsp;
+                            {% if user.user_id == g.user.user_id %}
+                            <span class="material-icons" id="edit-about-me-open">edit</span>
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="row text-start py-2 px-1 profile-header">
                         <h3>Top Lists by User</h2>
