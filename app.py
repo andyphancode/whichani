@@ -5,6 +5,7 @@ from routes.auth import auth
 from routes.user import user
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, List, likes
+from flask_cors import CORS, cross_origin
 
 # from secret import API_KEY_CONFIG
 
@@ -13,6 +14,7 @@ from sqlalchemy import desc, func
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__) 
+cors = CORS(app, origins=["whichani.me","whichani.onrender.com"])
 app.register_blueprint(list)
 app.register_blueprint(auth)
 app.register_blueprint(user)
