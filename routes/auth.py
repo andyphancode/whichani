@@ -85,6 +85,7 @@ def signup():
         return redirect(url_for('home'))
         
     else: 
+        print("Sign up form page loading.")
         return render_template('/user/signup.html', form=form)
 
 
@@ -117,7 +118,8 @@ def login():
             return redirect(url_for('home'))
         
         flash("Invalid credentials.", 'danger')
-
+        
+    print("Login form page loading.")
     return render_template('/user/login.html', form=form)
 
 def send_mail(user):
