@@ -78,6 +78,8 @@ def signup():
             flash("Username or email unavailable!", "danger")
             return render_template('/user/signup.html', form=form)
         
+        print(f"Form has been validated for ${user}")
+        
         do_login(user)
 
         return redirect(url_for('home'))
@@ -104,8 +106,11 @@ def login():
         return redirect(url_for('home'))
 
     if form.validate_on_submit():
+
         user = User.authenticate(form.username.data,
                                  form.password.data)
+        
+        print(f"Form has been validated for ${user}")
         
         if user:
             do_login(user)
