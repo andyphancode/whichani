@@ -5,7 +5,7 @@ from routes.auth import auth
 from routes.user import user
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User, List, likes
-from flask_cors import CORS, cross_origin
+
 
 # from secret import API_KEY_CONFIG
 
@@ -17,7 +17,6 @@ app = Flask(__name__)
 
 with app.app_context():
 
-    cors = CORS(app, origins=["whichani.me","whichani.onrender.com"])
     app.register_blueprint(list)
     app.register_blueprint(auth)
     app.register_blueprint(user)
@@ -27,7 +26,7 @@ with app.app_context():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///whichani')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
     app.config['SQLALCHEMY_ECHO'] = True
-    app.config['SESSION_COOKIE_SECURE'] = True
+
 
 
 connect_db(app)
