@@ -87,7 +87,10 @@ def signup():
         return redirect(url_for('home'))
         
     else: 
-        print("Sign up form page loading.")
+
+        # Form data is invalid
+        print(form.errors)
+
         return render_template('/user/signup.html', form=form)
 
 
@@ -121,6 +124,9 @@ def login():
             return redirect(url_for('home'))
         
         flash("Invalid credentials.", 'danger')
+
+    if not form.validate_on_submit():
+        print(form.errors)
 
     print("Login form page loading.")
     return render_template('/user/login.html', form=form)
