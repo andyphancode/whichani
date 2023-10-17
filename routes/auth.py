@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_mail import Message, Mail
 from flask import url_for
 import os
-from flask_cors import cross_origin
+
 
 CURR_USER_KEY = "curr_user"
 
@@ -56,7 +56,6 @@ def do_logout():
 ######################################################
 
 @auth.route('/signup/', methods=["GET", "POST"])
-@cross_origin()
 def signup():
     "Sign a user up."
 
@@ -80,8 +79,6 @@ def signup():
             flash("Username or email unavailable!", "danger")
             return render_template('/user/signup.html', form=form)
         
-        print(f"Form has been validated for ${user}")
-        
         do_login(user)
 
         return redirect(url_for('home'))
@@ -102,7 +99,6 @@ def logout():
     return redirect(url_for('home'))
 
 @auth.route('/login/', methods=["GET", "POST"])
-@cross_origin()
 def login():
     """Login a user."""
 
@@ -128,7 +124,6 @@ def login():
     if not form.validate_on_submit():
         print(form.errors)
 
-    print("Login form page loading.")
     return render_template('/user/login.html', form=form)
 
 def send_mail(user):
