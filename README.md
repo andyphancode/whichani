@@ -45,16 +45,17 @@ https://docs.api.jikan.moe/
 
 # Stack
 
-Flask
-bcrypt and Flask bcrypt
-SQLAlchemy and Flask SQLAlchemy
-Flask Mail
-WTForms and Flask WTForms
-gunicorn
-Jinja2
-psycopg2-binary
-requests
-PyJWT
+1. Flask
+2. bcrypt and Flask bcrypt
+3. Bootstrap 5
+4. SQLAlchemy and Flask SQLAlchemy
+5. Flask Mail
+6. WTForms and Flask WTForms
+7. gunicorn
+8. Jinja2
+9. psycopg2-binary
+10. requests
+11. PyJWT
 
 
 # Other
